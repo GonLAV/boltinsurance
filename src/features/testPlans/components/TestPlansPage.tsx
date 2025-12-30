@@ -511,7 +511,7 @@ const TestPlansPage: React.FC = () => {
             <div className="sidebar-section-title">Navigation</div>
             <button className="sidebar-item">
               <span className="sidebar-icon">📊</span>
-              <span>Overview</span>
+              <span>Dashboard</span>
             </button>
             <button className="sidebar-item">
               <span className="sidebar-icon">📋</span>
