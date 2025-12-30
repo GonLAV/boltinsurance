@@ -60,7 +60,17 @@ const DashboardView: React.FC = () => {
       const orgUrl = (localStorage.getItem('boltest:orgUrl') || '').trim();
       const project = (localStorage.getItem('boltest:project') || 'Epos').trim();
 
-      const resp = await storiesApi.getMyTasksWithChildBugs(orgUrl, project, effectiveAreaPath || undefined);
+      const selectedSprint = (localStorage.getItem('boltest:sprint') || sprint || '').trim();
+      const iterationPath = selectedSprint && selectedSprint !== 'Current' && effectiveAreaPath
+        ? `${effectiveAreaPath}\\${selectedSprint}`
+        : undefined;
+
+      const resp = await storiesApi.getMyTasksWithChildBugs(
+        orgUrl,
+        project,
+        effectiveAreaPath || undefined,
+        iterationPath
+      );
       const serverTasks: MyTaskItem[] = resp?.data?.data?.tasks || [];
       setTasks(serverTasks);
       toast.success(`Loaded ${serverTasks.length} tasks for @Me`);
@@ -71,7 +81,7 @@ const DashboardView: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [areaPath]);
+  }, [areaPath, sprint]);
 
   useEffect(() => {
     loadMyTasks();
