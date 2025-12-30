@@ -804,8 +804,7 @@ const TestPlansPage: React.FC = () => {
               <div className="toolbar">
                 <div className="toolbar-left">
                   <input
-                    className="form-input"
-                    style={{ maxWidth: 360 }}
+                    className="form-input input-max-360"
                     value={runName}
                     onChange={(e) => setRunName(e.target.value)}
                     placeholder="Manual Run name"
@@ -826,7 +825,7 @@ const TestPlansPage: React.FC = () => {
                 </div>
                 <div className="toolbar-right">
                   {activeRunId && (
-                    <span className="muted" style={{ marginRight: 12 }}>Run #{activeRunId}</span>
+                    <span className="muted mr-12">Run #{activeRunId}</span>
                   )}
                   <label className="muted">
                     <input type="checkbox"
@@ -836,7 +835,7 @@ const TestPlansPage: React.FC = () => {
                     />
                     Failed-only
                   </label>
-                  <span className="muted" style={{ marginRight: 12 }}>
+                  <span className="muted mr-12">
                     P:{counters.passed} F:{counters.failed} B:{counters.blocked} N:{counters.notrun} / {counters.total}
                   </span>
                   <button className="btn btn-primary" onClick={submitResults} disabled={!activeRunId || submittingResults}>
