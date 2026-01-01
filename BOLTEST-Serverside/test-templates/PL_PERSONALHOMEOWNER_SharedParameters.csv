@@ -1,0 +1,2 @@
+FirstName	LastName	Email	DateOfBirth	PrimaryPhoneNumber	PropertyAddressLine1	PropertyCity	PropertyState	PropertyZipCode	EffectiveDate	MaritalStatus	PLTypeOfDwelling	PLYearBuilt	PLConstructionType	RoofType	PLSquareFootage
+BoltQA	Testing	test13@epos.com	1980-09-11	555-656-4564	1117 Stratford Wy	London	OH	43140	{{currentdate}}	Single	SingleFamilyHouse	2010	Frame	ASPHALT_SHINGLES	2500

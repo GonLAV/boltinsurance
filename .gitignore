@@ -1,0 +1,22 @@
+# Dependencies
+**/node_modules/
+
+# Azure Functions local secrets
+**/local.settings.json
+
+# dotenv / env files
+**/.env
+**/.env.*
+**/*.env
+**/dotenv
+
+# Visual Studio / VS Code
+**/.vs/
+
+# Runtime artifacts
+**/*.log
+**/uploads/
+**/data/cache/
+
+# Large binaries
+**/*.pdf

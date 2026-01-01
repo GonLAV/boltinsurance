@@ -1,0 +1,2 @@
+FirstName	LastName	Email	DateOfBirth	PrimaryPhoneNumber	PropertyAddressLine1	PropertyCity	PropertyState	PropertyZipCode	EffectiveDate	MaritalStatus	PLTypeOfDwelling	PLYearBuilt	PLConstructionType	RoofType	PLSquareFootage	PLNumberOfStories
+test	qtest	45trg@epos.com	1985-03-03	555-555-5555	1117 Stratford Wy	London	OH	43140	{{currentdate}}	Single	Condominium	2021	Frame	ARCHITECTURAL_SHINGLES	2172	Two

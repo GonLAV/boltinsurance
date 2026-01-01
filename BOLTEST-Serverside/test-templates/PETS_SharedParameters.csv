@@ -1,0 +1,2 @@
+FirstName	LastName	Email	DateOfBirth	PrimaryPhoneNumber	PropertyAddressLine1	PropertyCity	PropertyState	PropertyZipCode	EffectiveDate	PetName	PetSpecies	PetBreed	PetGender	PetDOB
+GetAPItest	TestCopy	tesdemo233@epos.com	1980-09-11	555-656-4564	3275 Ocean Front Walk	San Diego	CA	92109	{{currentdate}}	Fido	Dog	AinuDog	Male	01/2000

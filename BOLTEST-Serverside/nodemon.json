@@ -1,0 +1,23 @@
+{
+  "watch": [
+    "src",
+    "controllers",
+    "services",
+    "config",
+    "middleware",
+    "utils",
+    "routes"
+  ],
+  "ext": "js,json",
+  "ignore": [
+    "uploads/**",
+    "build/**",
+    "docs/**",
+    "**/*.log",
+    ".dev-port.json",
+    ".env"
+  ],
+  "legacyWatch": true,
+  "delay": "300",
+  "exec": "node src/server.js"
+}

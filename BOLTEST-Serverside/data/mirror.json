@@ -1,0 +1,320 @@
+{
+  "testCases": [
+    {
+      "testCaseId": 227587,
+      "title": "DEMOGON11",
+      "url": "https://azure.devops.boltx.us/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227587",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://azure.devops.boltx.us/tfs/BoltCollection",
+      "updatedAt": "2025-12-30T10:11:33.073Z"
+    },
+    {
+      "testCaseId": 227460,
+      "title": "🏠 Personal Property (Homeowners)",
+      "url": "https://azure.devops.boltx.us/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227460",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://azure.devops.boltx.us/tfs/BoltCollection",
+      "updatedAt": "2025-12-29T10:28:17.415Z"
+    },
+    {
+      "testCaseId": 227446,
+      "title": "🚗 Commercial Auto Policy",
+      "url": "https://azure.devops.boltx.us/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227446",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://azure.devops.boltx.us/tfs/BoltCollection",
+      "updatedAt": "2025-12-29T09:05:13.026Z"
+    },
+    {
+      "testCaseId": 227386,
+      "title": "👤 Personal Line Applicant Creation",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227386",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-28T10:58:25.603Z"
+    },
+    {
+      "testCaseId": 227259,
+      "title": "Login Redirect Validation GON TEST",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227259",
+      "userStoryId": 223560,
+      "userStoryTitle": "Integration Hub - AMS 360: Synced Exception Queue Policies - Handle Unmatched Policies: Update Existing Policy Header",
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-24T12:24:35.885Z"
+    },
+    {
+      "testCaseId": 227202,
+      "title": "GON TESTNEW DEMO VER 12",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227202",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-23T23:58:17.281Z"
+    },
+    {
+      "testCaseId": 227201,
+      "title": "GON TEST DEMO VER 1",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227201",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-23T23:36:09.711Z"
+    },
+    {
+      "testCaseId": 227190,
+      "title": "TEST GON Login Redirect Validation GON TEST",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227190",
+      "userStoryId": 223560,
+      "userStoryTitle": "Integration Hub - AMS 360: Synced Exception Queue Policies - Handle Unmatched Policies: Update Existing Policy Header",
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-23T15:40:42.574Z"
+    },
+    {
+      "testCaseId": 227188,
+      "title": "GON TESTNEW DEMO",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-23T22:46:26.824Z"
+    },
+    {
+      "testCaseId": 227184,
+      "title": "TESTGON DEMO",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227184",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-23T14:49:38.008Z"
+    },
+    {
+      "testCaseId": 227178,
+      "title": "RTES REOMAN O",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227178",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-23T13:51:59.558Z"
+    },
+    {
+      "testCaseId": 227170,
+      "title": "Redirect Validation GON TEST",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227170",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-23T12:42:30.991Z"
+    },
+    {
+      "testCaseId": 227072,
+      "title": "vvxcxcvxcvogin Redirect Validation GON TEST",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227072",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-22T12:45:11.237Z"
+    },
+    {
+      "testCaseId": 227071,
+      "title": "asdasdasd1.2 – Login Redirect Validation GON TEST",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227071",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-22T12:43:20.939Z"
+    },
+    {
+      "testCaseId": 227067,
+      "title": "TC 1.2 – Login Redirect Validation GON TEST444",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227067",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-22T12:38:48.594Z"
+    },
+    {
+      "testCaseId": 227065,
+      "title": "Login Redirect Validation GON TEST 2",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227065",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-22T12:37:51.054Z"
+    },
+    {
+      "testCaseId": 227064,
+      "title": " Login Redirect Validation GON TEST",
+      "url": "https://tlvtfs03.ciosus.com/tfs/BoltCollection/05cfc0ec-e9cd-425b-8f5a-761bd609edf0/_workitems/edit/227064",
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-22T12:35:42.828Z"
+    },
+    {
+      "localId": "local-1766356459157",
+      "remoteId": null,
+      "syncStatus": "pending",
+      "syncError": "לא ניתן להגיע לשרת TFS/Azure DevOps (DNS): getaddrinfo ENOTFOUND tlvtfs03.ciosus.com",
+      "title": ":ogin Redirect Validation GON TEST",
+      "description": "ghggh",
+      "steps": [
+        {
+          "id": 1766356447071.1382,
+          "action": "On timeline, click + New Quote",
+          "expectedResult": "Quote flow starts"
+        },
+        {
+          "id": 1766356447071.6335,
+          "action": "Follow redirect",
+          "expectedResult": "Redirects to PL_Start page: interviewv3-qa-boltag.boltqa.com/PL_Start"
+        }
+      ],
+      "priority": null,
+      "assignedTo": null,
+      "tags": null,
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-21T22:34:19.158Z"
+    },
+    {
+      "localId": "local-1766355099882",
+      "remoteId": null,
+      "syncStatus": "pending",
+      "syncError": "לא ניתן להגיע לשרת TFS/Azure DevOps (DNS): getaddrinfo ENOTFOUND tlvtfs03.ciosus.com",
+      "title": "Login Redirect Validation GON TEST",
+      "description": "n GON TEST",
+      "steps": [
+        {
+          "id": 1766355087574.491,
+          "action": "Go to Accounts (PL tab)",
+          "expectedResult": "Accounts PL tab visible"
+        },
+        {
+          "id": 1766355087574.8076,
+          "action": "Click + New Account",
+          "expectedResult": "New account form appears"
+        },
+        {
+          "id": 1766355087574.1604,
+          "action": "Fill Source = Bolt PL; First/Last name, Email, Phone; Mailing Address",
+          "expectedResult": "Form validates all fields"
+        },
+        {
+          "id": 1766355087574.6814,
+          "action": "Click Add",
+          "expectedResult": "Consumer account created"
+        },
+        {
+          "id": 1766355087574.6238,
+          "action": "Observe redirect",
+          "expectedResult": "Redirected to /accounts/{id}/timeline"
+        }
+      ],
+      "priority": null,
+      "assignedTo": null,
+      "tags": null,
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-21T22:11:39.883Z"
+    },
+    {
+      "localId": "local-1766354806458",
+      "remoteId": null,
+      "syncStatus": "pending",
+      "syncError": "לא ניתן להגיע לשרת TFS/Azure DevOps (DNS): getaddrinfo ENOTFOUND tlvtfs03.ciosus.com",
+      "title": "Login Redirect Validation GON TEST",
+      "description": "test",
+      "steps": [
+        {
+          "id": 1766354792396.0679,
+          "action": "Go to Accounts (PL tab)",
+          "expectedResult": "Accounts PL tab visible"
+        },
+        {
+          "id": 1766354792396.194,
+          "action": "Click + New Account",
+          "expectedResult": "New account form appears"
+        },
+        {
+          "id": 1766354792396.7346,
+          "action": "Fill Source = Bolt PL; First/Last name, Email, Phone; Mailing Address",
+          "expectedResult": "Form validates all fields"
+        },
+        {
+          "id": 1766354792396.4158,
+          "action": "Click Add",
+          "expectedResult": "Consumer account created"
+        },
+        {
+          "id": 1766354792396.1292,
+          "action": "Observe redirect",
+          "expectedResult": "Redirected to /accounts/{id}/timeline"
+        }
+      ],
+      "priority": null,
+      "assignedTo": null,
+      "tags": null,
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-21T22:06:46.458Z"
+    },
+    {
+      "localId": "local-1766354659205",
+      "remoteId": null,
+      "syncStatus": "pending",
+      "syncError": "לא ניתן להגיע לשרת TFS/Azure DevOps (DNS): getaddrinfo ENOTFOUND tlvtfs03.ciosus.com",
+      "title": "sdsds",
+      "description": "asdadasdasdasd",
+      "steps": [
+        {
+          "id": 1766354651208.9575,
+          "action": "Login successfully",
+          "expectedResult": "Login succeeds"
+        },
+        {
+          "id": 1766354651208.0435,
+          "action": "Confirm browser loads https://adbx-qa-boltag.boltqa.com/home",
+          "expectedResult": "Correct home URL is loaded"
+        },
+        {
+          "id": 1766354651208.2734,
+          "action": "Verify home dashboard and navigation",
+          "expectedResult": "Home Dashboard loads fully; user menu & navigation visible"
+        }
+      ],
+      "priority": null,
+      "assignedTo": null,
+      "tags": null,
+      "userStoryId": null,
+      "userStoryTitle": null,
+      "project": "Epos",
+      "orgUrl": "https://tlvtfs03.ciosus.com/tfs/BoltCollection",
+      "updatedAt": "2025-12-21T22:04:19.205Z"
+    }
+  ]
+}
