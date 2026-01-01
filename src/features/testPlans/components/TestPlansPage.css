@@ -564,6 +564,22 @@
   color: #0277bd;
 }
 
+/* Tag chips */
+.tag-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tag-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 12px;
+  background: #eef2ff;
+  color: #334155;
+  border: 1px solid #c7d2fe;
+}
+
 .status-active {
   background: #fff9c4;
   color: #f57f17;

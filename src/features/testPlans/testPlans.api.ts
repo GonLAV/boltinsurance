@@ -1,4 +1,4 @@
-import { apiClient } from '../../shared/services/apiClient';
+import { apiClient, cachedGet } from '../../shared/services/apiClient';
 
 export type TestPlan = {
   id: number;
@@ -85,6 +85,14 @@ export type GetTestPointsRequest = {
   backendKey?: string;
 };
 
+export type GetTestCaseDetailsRequest = {
+  org: string;
+  project: string;
+  ids: number[];
+  fields?: string[];
+  backendKey?: string;
+};
+
 const withBackendKey = (backendKey?: string) =>
   backendKey
     ? {
@@ -94,20 +102,20 @@ const withBackendKey = (backendKey?: string) =>
 
 export const testPlansApi = {
   getPlans: ({ org, project, backendKey }: GetPlansRequest) =>
-    apiClient.get('/api/ado/testplans', {
+    cachedGet('/api/ado/testplans', {
       params: { org, project },
       ...withBackendKey(backendKey)
-    }),
+    }, 120_000),
   getSuites: ({ org, project, planId, backendKey }: GetSuitesRequest) =>
-    apiClient.get('/api/ado/testsuites', {
+    cachedGet('/api/ado/testsuites', {
       params: { org, project, planId },
       ...withBackendKey(backendKey)
-    }),
+    }, 120_000),
   getSuiteEntries: ({ org, project, suiteId, suiteEntryType = 'testCase', backendKey }: GetSuiteEntriesRequest) =>
-    apiClient.get('/api/ado/suiteentries', {
+    cachedGet('/api/ado/suiteentries', {
       params: { org, project, suiteId, suiteEntryType },
       ...withBackendKey(backendKey)
-    }),
+    }, 60_000),
   createRun: ({ org, project, name, planId, comment, backendKey }: CreateRunRequest) =>
     apiClient.post(
       '/api/ado/testrun',
@@ -121,8 +129,14 @@ export const testPlansApi = {
       withBackendKey(backendKey)
     ),
   getTestPoints: ({ org, project, planId, suiteId, includePointDetails = true, testCaseId, backendKey }: GetTestPointsRequest) =>
-    apiClient.get('/api/ado/testpoints', {
+    cachedGet('/api/ado/testpoints', {
       params: { org, project, planId, suiteId, includePointDetails, testCaseId },
       ...withBackendKey(backendKey)
-    })
+    }, 60_000)
+  ,
+  getTestCaseDetails: ({ org, project, ids, fields, backendKey }: GetTestCaseDetailsRequest) =>
+    cachedGet('/api/ado/testcases/details', {
+      params: { org, project, ids: ids.join(','), fields: (fields || []).join(',') },
+      ...withBackendKey(backendKey)
+    }, 60_000)
 };

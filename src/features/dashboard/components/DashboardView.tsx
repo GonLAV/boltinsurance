@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { MyTaskItem, storiesApi } from '../../stories/stories.api';
 import './DashboardView.css';
+import { metricsApi } from '../services/metrics.api';
 
 // ⚡ PERFORMANCE: Memoized task item component to prevent re-renders
 const TaskItemMemo: React.FC<{ task: MyTaskItem; onClick: (task: MyTaskItem) => void }> = React.memo(
@@ -45,11 +46,14 @@ const DashboardView: React.FC = () => {
   ], []);
   const [sprint, setSprint] = useState<string>(localStorage.getItem('boltest:sprint') || 'Current');
   const sprintOptions = useMemo(() => [
-    'Current', 'Sprint 2601', 'Sprint 2600', 'Sprint 2516', 'Sprint 2515', 'Sprint 2514', 'Sprint 2513', 'Sprint 2512', 'Sprint 2511'
+    'Current', '2602', '2601', '2600', '2516', '2515', '2514', '2513', '2512', '2511'
   ], []);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string[]>(['New', 'Active', 'Closed']);
   const [bugFilter, setBugFilter] = useState<'all' | 'with-bugs' | 'without-bugs'>('all');
+  const [sprintSummary, setSprintSummary] = useState<any>(null);
+  const [capacitySummary, setCapacitySummary] = useState<any>(null);
+  const [taskSummary, setTaskSummary] = useState<any>(null);
 
   const loadMyTasks = useCallback(async () => {
     try {
@@ -61,9 +65,9 @@ const DashboardView: React.FC = () => {
       const project = (localStorage.getItem('boltest:project') || 'Epos').trim();
 
       const selectedSprint = (localStorage.getItem('boltest:sprint') || sprint || '').trim();
-      const iterationPath = selectedSprint && selectedSprint !== 'Current' && effectiveAreaPath
-        ? `${effectiveAreaPath}\\${selectedSprint}`
-        : undefined;
+      const iterationPath = selectedSprint && selectedSprint !== 'Current'
+        ? `${project}\\${selectedSprint}`
+        : '@CurrentIteration';
 
       const resp = await storiesApi.getMyTasksWithChildBugs(
         orgUrl,
@@ -74,6 +78,37 @@ const DashboardView: React.FC = () => {
       const serverTasks: MyTaskItem[] = resp?.data?.data?.tasks || [];
       setTasks(serverTasks);
       toast.success(`Loaded ${serverTasks.length} tasks for @Me`);
+
+      // Fetch sprint metrics for the selected team(s) & sprint
+      if (selectedSprint && selectedSprint !== 'Current') {
+        const sprintNum = selectedSprint.replace(/^Sprint\s*/i, '');
+        const teamList = effectiveAreaPath.split(',').map((s) => s.trim()).filter(Boolean);
+        try {
+          const summaryResp = await metricsApi.getSprintSummary(teamList.length ? teamList : [effectiveAreaPath], sprintNum);
+          const d = summaryResp?.data;
+          // Some providers return numeric 403 payload; normalize
+          if (typeof d === 'number' && d === 403) setSprintSummary(null);
+          else setSprintSummary(d || null);
+        } catch (e) {
+          setSprintSummary(null);
+        }
+        try {
+          const capResp = await metricsApi.getSprintCapacity(teamList.length ? teamList : [effectiveAreaPath], sprintNum);
+          setCapacitySummary(capResp?.data || null);
+        } catch (e) {
+          setCapacitySummary(null);
+        }
+        try {
+          const tasksResp = await metricsApi.getSprintTasks(teamList.length ? teamList : [effectiveAreaPath], sprintNum);
+          setTaskSummary(tasksResp?.data || null);
+        } catch (e) {
+          setTaskSummary(null);
+        }
+      } else {
+        setSprintSummary(null);
+        setCapacitySummary(null);
+        setTaskSummary(null);
+      }
     } catch (err: any) {
       console.error('mytasks fetch failed', err);
       toast.error('Failed to load my tasks');
@@ -115,8 +150,10 @@ const DashboardView: React.FC = () => {
 
   const headline = useMemo(() => {
     const bugCount = tasks.reduce((acc, t) => acc + ((t.bugs || []).length || 0), 0);
-    return `Found ${tasks.length} tasks · ${bugCount} child bugs`;
-  }, [tasks]);
+    const sp = sprintSummary?.summary?.totalStoryPointsCompleted;
+    const spText = typeof sp === 'number' ? ` · ${sp} SP done` : '';
+    return `Found ${tasks.length} tasks · ${bugCount} child bugs${spText}`;
+  }, [tasks, sprintSummary]);
 
   return (
     <div className="page-card tc-shell tc-wide" id="dashboardView">
@@ -133,15 +170,7 @@ const DashboardView: React.FC = () => {
           {teams.map((t) => (
             <option key={t} value={t}>{t}</option>
           ))}
-          <option value="">(Custom… type below)</option>
         </select>
-        <input
-          type="text"
-          placeholder="Area path (optional filter)"
-          value={areaPath}
-          onChange={(e) => setAreaPath(e.target.value)}
-          className="search-box dash-area-input"
-        />
         <button className="filter-btn" onClick={loadMyTasks} disabled={loading}>
           <span>{loading ? '⏳' : '🔁'}</span> <span>Refresh My Tasks</span>
         </button>
@@ -211,6 +240,29 @@ const DashboardView: React.FC = () => {
           <span>📌 My Tasks (Assigned to Me)</span>
           <span className="dash-headline">{headline}</span>
         </div>
+        {(capacitySummary || taskSummary) && (
+          <div className="dash-metrics-cards dash-mt-8">
+            {capacitySummary && (
+              <div className="dash-card">
+                <div className="dash-card-title">Sprint Capacity</div>
+                <div className="dash-card-body">
+                  <div>Total Capacity: <strong>{capacitySummary?.summary?.organization?.totalCapacity ?? 0}h</strong></div>
+                  <div>Allocated: <strong>{capacitySummary?.summary?.organization?.totalAllocated ?? 0}h</strong></div>
+                </div>
+              </div>
+            )}
+            {taskSummary && (
+              <div className="dash-card">
+                <div className="dash-card-title">Sprint Tasks</div>
+                <div className="dash-card-body">
+                  <div>Estimated: <strong>{taskSummary?.summary?.totalEstimatedHours ?? 0}h</strong></div>
+                  <div>Remaining: <strong>{taskSummary?.summary?.totalRemainingHours ?? 0}h</strong></div>
+                  <div>Completed: <strong>{taskSummary?.summary?.totalCompletedHours ?? 0}h</strong></div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         {loading ? (
           <div className="dash-loading">Loading...</div>
         ) : (

@@ -1,0 +1,909 @@
+/* COSMIC RICH TEXT EDITOR STYLES */
+
+/* IMPORTANT: Keep these styles scoped to the editor containers.
+   Global resets here can break unrelated pages/components. */
+.cosmic-container *,
+.re-embedded * {
+  box-sizing: border-box;
+}
+
+.cosmic-container {
+  background: linear-gradient(135deg, #001122 0%, #002244 25%, #003366 50%, #002244 75%, #001122 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-y: auto;
+  position: relative;
+  padding: 20px 15px;
+  height: 100%;
+  width: 100%;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 2;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.steps-screen-body {
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.section-label {
+  background: linear-gradient(90deg, rgba(0, 102, 204, 0.2), transparent);
+  color: #d4e8ff;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  letter-spacing: 0.5px;
+}
+
+.steps-screen-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2000;
+}
+
+.steps-screen {
+  width: 100%;
+  height: 100%;
+  padding: 40px 20px;
+}
+
+.steps-screen-header {
+  background: linear-gradient(90deg, rgba(0, 102, 204, 0.2), transparent);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.steps-screen-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.steps-screen-close:hover {
+  background: rgba(0, 102, 204, 0.2);
+  border-color: rgba(0, 102, 204, 0.5);
+}
+
+.re-embedded {
+  width: 100%;
+}
+
+/* Toolbar icon utility classes (avoid inline styles) */
+.re-icon-16 { font-size: 16px; }
+.re-icon-18 { font-size: 18px; }
+.re-icon-20 { font-size: 20px; }
+.re-icon-bold { font-weight: 900; }
+.re-icon-italic { font-style: italic; }
+.re-icon-underline { text-decoration: underline; }
+.re-icon-strike { text-decoration: line-through; }
+.re-icon-mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+.re-icon-text-color { color: #d4e8ff; }
+.re-icon-bg-color { background-color: #ffeb3b; color: #000000; padding: 2px 4px; border-radius: 4px; }
+
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 102, 204, 0.4), 0 0 40px rgba(0, 102, 204, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(0, 102, 204, 0.6), 0 0 60px rgba(0, 102, 204, 0.3); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.cosmic-orb {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+  opacity: 0.3;
+}
+
+.orb-1 {
+  background: radial-gradient(circle, #0066cc, transparent);
+  top: 10%;
+  left: 10%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.orb-2 {
+  background: radial-gradient(circle, #004c99, transparent);
+  bottom: 10%;
+  right: 10%;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+.test-section {
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  animation: float 6s ease-in-out infinite;
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 2;
+  flex: 1 1 calc(50% - 8px);
+  min-width: 450px;
+  max-width: calc(50% - 8px);
+}
+
+.test-section.steps-screen-body {
+  flex: 1 1 100%;
+  min-width: 100%;
+  max-width: 100%;
+  width: 100%;
+}
+
+.test-section:hover {
+  transform: scale(1.02);
+  border-color: rgba(0, 102, 204, 0.5);
+  animation: float 6s ease-in-out infinite, glow-pulse 2s ease-in-out infinite;
+}
+
+.section-header {
+  background: linear-gradient(90deg, rgba(0, 102, 204, 0.2), transparent);
+  padding: 16px 20px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  animation: shimmer 3s infinite;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+}
+
+.toolbar-title {
+  color: #d4e8ff;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-shadow: none;
+  letter-spacing: 0.5px;
+}
+
+.toolbar-subtitle {
+  color: rgba(212, 232, 255, 0.85);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/*
+  IMPORTANT: these class names (.toolbar, .toolbar-btn, ...) are generic and can be
+  overridden elsewhere in the app (e.g. other pages that also define .toolbar).
+  We scope them under RichEditor containers to ensure the HTML-mock styling wins.
+*/
+
+.cosmic-container .toolbar,
+.re-embedded .toolbar {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ===== Added: make "placeholder" toolbar buttons actually feel active ===== */
+.cosmic-container .toolbar-btn.active,
+.re-embedded .toolbar-btn.active {
+  border-color: rgba(0, 102, 204, 0.75);
+  background: rgba(0, 102, 204, 0.15);
+}
+
+/* Track changes: highlight inserted spans */
+.cosmic-container .azure-inserted,
+.re-embedded .azure-inserted {
+  background: rgba(255, 235, 59, 0.25);
+  border-bottom: 1px dashed rgba(255, 235, 59, 0.8);
+}
+
+/* Math: mono styling */
+.cosmic-container .azure-math,
+.re-embedded .azure-math {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+/* Comments: dotted underline + hover tooltip (data-comment) */
+.cosmic-container .azure-comment,
+.re-embedded .azure-comment {
+  position: relative;
+  border-bottom: 2px dotted rgba(0, 204, 255, 0.8);
+}
+
+.cosmic-container .azure-comment[data-comment]:hover::after,
+.re-embedded .azure-comment[data-comment]:hover::after {
+  content: attr(data-comment);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: 6px;
+  z-index: 5;
+  max-width: 320px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+
+.cosmic-container .toolbar-group,
+.re-embedded .toolbar-group {
+  display: flex;
+  gap: 3px;
+  padding-right: 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cosmic-container .toolbar-group:last-child,
+.re-embedded .toolbar-group:last-child {
+  border-right: none;
+}
+
+.cosmic-container .toolbar-btn,
+.re-embedded .toolbar-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 11px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cosmic-container .toolbar-btn::before,
+.re-embedded .toolbar-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(0, 102, 204, 0.4);
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.cosmic-container .toolbar-btn:hover,
+.re-embedded .toolbar-btn:hover {
+  background: rgba(0, 102, 204, 0.3);
+  border-color: rgba(0, 102, 204, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 102, 204, 0.3);
+}
+
+.cosmic-container .toolbar-btn:hover::before,
+.re-embedded .toolbar-btn:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.cosmic-container .toolbar-btn:active,
+.re-embedded .toolbar-btn:active {
+  transform: translateY(0);
+}
+
+.cosmic-container .toolbar-btn span,
+.re-embedded .toolbar-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+.cosmic-container .toolbar-select,
+.re-embedded .toolbar-select {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.3s ease;
+  min-width: 90px;
+}
+
+.cosmic-container .toolbar-select:hover,
+.re-embedded .toolbar-select:hover {
+  background: rgba(0, 102, 204, 0.2);
+  border-color: rgba(0, 102, 204, 0.5);
+}
+
+.cosmic-container .toolbar-select option,
+.re-embedded .toolbar-select option {
+  background: #1a1538;
+  color: white;
+}
+
+.cosmic-container .editor-area,
+.re-embedded .editor-area {
+  padding: 12px;
+  min-height: 100px;
+}
+
+.cosmic-container .editor-content,
+.re-embedded .editor-content {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  color: white;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 80px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Segoe UI', monospace;
+}
+
+.cosmic-container .editor-content:focus,
+.re-embedded .editor-content:focus {
+  border-color: rgba(0, 102, 204, 0.6);
+  box-shadow: 0 0 30px rgba(0, 102, 204, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.cosmic-container .editor-content[contenteditable="true"]:empty::before,
+.re-embedded .editor-content[contenteditable="true"]:empty::before {
+  content: attr(data-placeholder);
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Content Styling */
+.editor-content p {
+  margin: 0 0 10px;
+}
+
+.editor-content code,
+.azure-code-inline {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  background: rgba(0, 102, 204, 0.1);
+  border: 1px solid rgba(0, 102, 204, 0.3);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 13px;
+  color: #a8d4ff;
+}
+
+.azure-code-block {
+  background: rgba(0, 0, 0, 0.4);
+  color: #a8d4ff;
+  border-radius: 10px;
+  padding: 14px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  white-space: pre;
+  overflow-x: auto;
+  margin: 10px 0;
+  border: 1px solid rgba(0, 102, 204, 0.3);
+}
+
+.azure-heading {
+  font-size: 22px;
+  font-weight: 700;
+  color: #00ccff;
+  border-bottom: 2px solid #00ccff;
+  padding-bottom: 4px;
+  margin: 12px 0 6px;
+}
+
+.azure-quote {
+  border-left: 4px solid #0066cc;
+  background: rgba(0, 102, 204, 0.1);
+  padding: 12px 14px;
+  margin: 10px 0;
+  color: #a8d4ff;
+  font-style: italic;
+}
+
+.azure-task {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  color: white;
+}
+
+.azure-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.azure-table th {
+  background: rgba(0, 102, 204, 0.4);
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+  font-weight: 600;
+  border: 1px solid rgba(0, 102, 204, 0.3);
+}
+
+.azure-table td {
+  padding: 10px;
+  border: 1px solid rgba(0, 102, 204, 0.2);
+  color: white;
+}
+
+.azure-table tr:nth-child(even) {
+  background: rgba(0, 102, 204, 0.05);
+}
+
+.azure-panel {
+  border: 2px solid #0066cc;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 10px 0;
+  background: rgba(0, 102, 204, 0.08);
+}
+
+.azure-panel-title {
+  font-weight: 700;
+  color: #00ccff;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.azure-img {
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+  border-radius: 8px;
+  display: block;
+}
+
+.azure-mention {
+  background: rgba(0, 102, 204, 0.15);
+  color: #a8d4ff;
+  border: 1px solid rgba(0, 102, 204, 0.35);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* Modal Styles */
+.re-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.re-modal-card {
+  background: rgba(20, 30, 50, 0.95);
+  border: 1px solid rgba(0, 102, 204, 0.4);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 102, 204, 0.2);
+  animation: float 0.3s ease-out;
+}
+
+.re-modal-title {
+  color: #d4e8ff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+.re-modal-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 12px;
+  color: white;
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.re-modal-input:focus {
+  border-color: rgba(0, 102, 204, 0.6);
+  box-shadow: 0 0 20px rgba(0, 102, 204, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+.re-modal-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 12px;
+  color: white;
+  font-size: 14px;
+  min-height: 120px;
+  resize: vertical;
+  margin-bottom: 12px;
+  font-family: 'Segoe UI', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.re-modal-textarea:focus {
+  border-color: rgba(0, 102, 204, 0.6);
+  box-shadow: 0 0 20px rgba(0, 102, 204, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+.re-modal-textarea.code {
+  font-family: 'Courier New', monospace;
+}
+
+.re-modal-preview {
+  margin: 12px 0;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 102, 204, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+}
+
+.re-modal-preview-img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+}
+
+.re-modal-grid-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.re-modal-grid-col {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.re-modal-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.re-modal-input-number {
+  width: 60px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 14px;
+}
+
+.re-modal-info {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 12px 0;
+  padding: 8px;
+  background: rgba(0, 102, 204, 0.1);
+  border-left: 2px solid rgba(0, 102, 204, 0.4);
+  border-radius: 4px;
+}
+
+.re-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.re-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.re-btn.ghost {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.re-btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.re-btn.azure {
+  background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
+  color: white;
+  border: 1px solid rgba(0, 102, 204, 0.5);
+}
+
+.re-btn.azure:hover {
+  background: linear-gradient(135deg, #0078d4 0%, #0066cc 100%);
+  box-shadow: 0 0 20px rgba(0, 102, 204, 0.4);
+}
+
+/* Color & Emoji Pickers */
+.re-picker-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.re-picker-wrapper.re-picker-fixed {
+  position: fixed;
+  display: block;
+  z-index: 1001;
+}
+
+.re-picker-wrapper.re-picker-fixed.place-above {
+  transform: translateY(-100%);
+}
+
+.re-picker-wrapper.re-picker-fixed.place-below {
+  transform: none;
+}
+
+.re-picker-wrapper.re-picker-fixed .re-picker {
+  position: relative;
+  top: auto;
+  left: auto;
+  margin-top: 0;
+}
+
+.re-picker {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(20, 30, 50, 0.95);
+  border: 1px solid rgba(0, 102, 204, 0.4);
+  border-radius: 12px;
+  padding: 12px;
+  z-index: 1001;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin-top: 8px;
+}
+
+.re-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+}
+
+.re-picker-column {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.re-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  background: white;
+}
+
+.re-swatch-clear {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Text color swatches */
+.re-swatch-black { background: #000000; }
+.re-swatch-red { background: #ef4444; }
+.re-swatch-amber { background: #f59e0b; }
+.re-swatch-emerald { background: #10b981; }
+.re-swatch-blue { background: #3b82f6; }
+.re-swatch-azure { background: #0078d4; }
+.re-swatch-violet { background: #8b5cf6; }
+.re-swatch-pink { background: #ec4899; }
+.re-swatch-slate { background: #64748b; }
+.re-swatch-white { background: #ffffff; border-color: rgba(0, 0, 0, 0.25); }
+
+/* Highlight swatches */
+.re-hl-amber-100 { background: #fef3c7; }
+.re-hl-blue-100 { background: #dbeafe; }
+.re-hl-emerald-100 { background: #d1fae5; }
+.re-hl-pink-100 { background: #fce7f3; }
+.re-hl-indigo-100 { background: #e0e7ff; }
+.re-hl-red-50 { background: #fef2f2; }
+.re-hl-gray-100 { background: #f3f4f6; }
+.re-hl-amber-50 { background: #fffbeb; }
+.re-hl-pink-50 { background: #fdf2f8; }
+
+.re-swatch:hover {
+  border-color: rgba(0, 102, 204, 0.6);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0, 102, 204, 0.4);
+}
+
+.re-emoji-picker {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(20, 30, 50, 0.95);
+  border: 1px solid rgba(0, 102, 204, 0.4);
+  border-radius: 12px;
+  padding: 8px;
+  z-index: 1001;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin-top: 8px;
+}
+
+.re-emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+}
+
+.re-emoji-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.re-emoji-btn:hover {
+  background: rgba(0, 102, 204, 0.2);
+  border-color: rgba(0, 102, 204, 0.6);
+  transform: scale(1.1);
+}
+
+.re-size-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.re-size-btn:hover {
+  background: rgba(0, 102, 204, 0.2);
+  border-color: rgba(0, 102, 204, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content-wrapper {
+    justify-content: center;
+  }
+
+  .cosmic-container .toolbar,
+  .re-embedded .toolbar {
+    gap: 8px;
+    padding: 16px 20px;
+  }
+
+  .cosmic-container .toolbar-group,
+  .re-embedded .toolbar-group {
+    padding-right: 12px;
+  }
+
+  .cosmic-container .toolbar-btn,
+  .re-embedded .toolbar-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .cosmic-container .toolbar-title,
+  .re-embedded .toolbar-title {
+    font-size: 22px;
+  }
+
+  .section-header {
+    padding: 20px;
+  }
+
+  .re-modal-card {
+    width: 95%;
+    padding: 20px;
+  }
+}

@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { testCaseApi } from '../../testCases/testCase.api';
+import { testCaseApi, tagSuggestionApi } from '../../testCases/testCase.api';
 import './TeamTestsView.css';
+import { getTagSuggestions, saveTagHistory } from '../../testCases/utils/tagSuggestions';
 
 interface TestCase {
   id: number;
@@ -21,6 +22,9 @@ const TeamTestsView: React.FC = () => {
   const [search, setSearch] = useState('');
   const [filterState, setFilterState] = useState<string>('');
   const [tagFilter, setTagFilter] = useState<string>('');
+  const [tagQuery, setTagQuery] = useState<string>('');
+  const [showTagSuggest, setShowTagSuggest] = useState<boolean>(false);
+  const [serverTagSuggestions, setServerTagSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchTestCases = async () => {
@@ -53,13 +57,39 @@ const TeamTestsView: React.FC = () => {
       const list = Array.isArray(t)
         ? t
         : (t || '')
-            .split(',')
+            .split(/[;,]/)
             .map((s) => s.trim())
             .filter(Boolean);
       list.forEach((x) => set.add(x));
     });
     return Array.from(set).sort();
   }, [testCases]);
+
+  const tagSuggestions = useMemo(() => getTagSuggestions(allTags), [allTags]);
+  const combinedTagSuggestions = useMemo(() => {
+    const set = new Set<string>();
+    tagSuggestions.forEach((t) => set.add(t));
+    serverTagSuggestions.forEach((t) => set.add(t));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [tagSuggestions, serverTagSuggestions]);
+
+  useEffect(() => {
+    // Fetch server-side tag suggestions once when tests are loaded
+    if (!loading) {
+      const fetchTags = async () => {
+        try {
+          const resp = await tagSuggestionApi.getSuggestions({ top: 500 });
+          const tags = resp?.data?.data?.tags || [];
+          if (Array.isArray(tags) && tags.length) {
+            setServerTagSuggestions(tags);
+          }
+        } catch (e) {
+          // silent: backend may be offline or PAT missing
+        }
+      };
+      fetchTags();
+    }
+  }, [loading]);
 
   const filtered = testCases.filter((tc) => {
     const matchSearch = search.trim()
@@ -69,7 +99,7 @@ const TeamTestsView: React.FC = () => {
     const list = Array.isArray(tc.tags)
       ? tc.tags
       : (tc.tags || '')
-          .split(',')
+          .split(/[;,]/)
           .map((s) => s.trim())
           .filter(Boolean);
     const matchTag = tagFilter ? list.includes(tagFilter) : true;
@@ -157,17 +187,48 @@ const TeamTestsView: React.FC = () => {
           <option value="Closed">Closed</option>
         </select>
 
-        <select
-          value={tagFilter}
-          onChange={(e) => setTagFilter(e.target.value)}
-          className="tt-state-select"
-          aria-label="Filter by tag"
-        >
-          <option value="">All Tags</option>
-          {allTags.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
+        <div className="tt-tag-typeahead" onBlur={() => setTimeout(() => setShowTagSuggest(false), 120)}>
+          <input
+            value={tagQuery}
+            onFocus={() => setShowTagSuggest(true)}
+            onChange={(e) => {
+              setTagQuery(e.target.value);
+              setShowTagSuggest(true);
+            }}
+            placeholder="Filter by tag..."
+            aria-label="Filter by tag"
+            className="tt-state-select"
+          />
+          {showTagSuggest && (
+            <div className="tt-suggest-list">
+              <div
+                className={`tt-suggest-item ${tagFilter === '' ? 'active' : ''}`}
+                onMouseDown={() => {
+                  setTagFilter('');
+                  setTagQuery('');
+                }}
+              >
+                All Tags
+              </div>
+              {combinedTagSuggestions
+                .filter((t) => t.toLowerCase().includes(tagQuery.toLowerCase()))
+                .slice(0, 20)
+                .map((t) => (
+                  <div
+                    key={t}
+                    className={`tt-suggest-item ${tagFilter === t ? 'active' : ''}`}
+                    onMouseDown={() => {
+                      setTagFilter(t);
+                      setTagQuery(t);
+                      saveTagHistory(t);
+                    }}
+                  >
+                    #{t}
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
 
         {(search || filterState) && (
           <button
@@ -232,7 +293,7 @@ const TeamTestsView: React.FC = () => {
                 const list = Array.isArray(tc.tags)
                   ? tc.tags
                   : (tc.tags || '')
-                      .split(',')
+                      .split(/[;,]/)
                       .map((s) => s.trim())
                       .filter(Boolean);
                 return list.length ? (

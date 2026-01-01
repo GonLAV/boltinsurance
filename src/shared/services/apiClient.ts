@@ -70,6 +70,10 @@ apiClient.interceptors.request.use((req) => {
       if (project && !getHeader('x-project') && !getHeader('X-Project')) {
         setHeader('x-project', project);
       }
+      const pat = typeof window !== 'undefined' ? localStorage.getItem('boltest:pat') : null;
+      if (pat && !getHeader('x-pat') && !getHeader('X-PAT')) {
+        setHeader('x-pat', pat);
+      }
       
       // Debug: show what credentials are being used
       if (isDev && req.url === '/api/attachments') {

@@ -33,7 +33,27 @@ export const testCaseApi = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
   
-  getTestCases: () => cachedGet('/api/testcases', undefined, 120_000),
+  getTestCases: async () => {
+    const project = (localStorage.getItem('boltest:project') || '').trim();
+    const orgUrl = (localStorage.getItem('boltest:orgUrl') || '').trim();
+    const params = new URLSearchParams();
+    if (project) params.append('project', project);
+    const headers = orgUrl ? { headers: { 'X-OrgUrl': orgUrl } } : undefined;
+    const query = params.toString();
+    const adoUrl = `/api/ado/testcases?${query}`;
+    const legacyUrl = `/api/testcases?${query}`;
+
+    try {
+      const res = await cachedGet(adoUrl, headers, 60_000);
+      if (res?.data?.success) {
+        return res;
+      }
+    } catch (e) {
+      // swallow and try legacy route
+    }
+
+    return cachedGet(legacyUrl, headers, 60_000);
+  },
   
   getTestCaseById: (testCaseId: number) => cachedGet(`/api/testcases/${testCaseId}`, undefined, 120_000),
   
@@ -50,6 +70,22 @@ export const testCaseApi = {
     iteration?: string;
     attachmentIds?: string[];
   }) => apiClient.patch(`/api/testcases/${testCaseId}`, payload)
+};
+
+// Tag suggestions from Azure DevOps (ADO/TFS)
+export const tagSuggestionApi = {
+  getSuggestions: (opts?: { areaPath?: string; iterationPath?: string; top?: number; search?: string }) => {
+    const params = new URLSearchParams();
+    const project = (localStorage.getItem('boltest:project') || '').trim();
+    const orgUrl = (localStorage.getItem('boltest:orgUrl') || '').trim();
+    if (project) params.append('project', project);
+    if (opts?.areaPath) params.append('areaPath', opts.areaPath);
+    if (opts?.iterationPath) params.append('iterationPath', opts.iterationPath);
+    if (typeof opts?.top === 'number') params.append('top', String(opts.top));
+    if (opts?.search) params.append('search', opts.search);
+    const headers = orgUrl ? { headers: { 'X-OrgUrl': orgUrl } } : undefined;
+    return cachedGet(`/api/ado/tags/suggestions?${params.toString()}`, headers, 120_000);
+  }
 };
 
 export const wikiAttachmentApi = {

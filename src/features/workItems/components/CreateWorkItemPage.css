@@ -1,0 +1,7 @@
+.cwi-tabs {
+  margin-bottom: 18px;
+}
+
+.cwi-span-all {
+  grid-column: 1 / -1;
+}

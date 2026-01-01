@@ -34,9 +34,10 @@ const withOrgHeader = (orgUrl: string) => {
 
 export const storiesApi = {
   // Fetch all user stories from Azure DevOps
-  getUserStories: (orgUrl: string, project: string, areaPath?: string) => {
+  getUserStories: (orgUrl: string, project: string, areaPath?: string, iterationPath?: string) => {
     const params = new URLSearchParams({ project });
     if (areaPath) params.append('areaPath', areaPath);
+    if (iterationPath) params.append('iterationPath', iterationPath);
     return cachedGet(`/api/ado/userstories?${params.toString()}`, withOrgHeader(orgUrl), 120_000);
   },
 

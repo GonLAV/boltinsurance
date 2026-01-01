@@ -1,0 +1,295 @@
+/* ========== Tenant Filter Container ========== */
+.tenant-filter-container {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+}
+
+.tenant-filter-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* ========== Button ========== */
+.tenant-filter-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  width: 100%;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tenant-filter-button:hover {
+  border-color: #0078d4;
+  background-color: #f3f3f3;
+  box-shadow: 0 1px 3px rgba(0, 120, 212, 0.1);
+}
+
+.tenant-filter-button:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 4px rgba(0, 120, 212, 0.3);
+}
+
+.tenant-filter-icon {
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tenant-filter-text {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tenant-filter-arrow {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+  color: #666;
+}
+
+.tenant-filter-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* ========== Dropdown Menu ========== */
+.tenant-filter-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background-color: #fff;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== Search Input ========== */
+.tenant-filter-search-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.tenant-filter-search {
+  width: 100%;
+  padding: 8px 12px;
+  padding-right: 28px;
+  border: 1px solid #d0d0d0;
+  border-radius: 3px;
+  font-size: 13px;
+  background-color: #f7f7f7;
+}
+
+.tenant-filter-search:focus {
+  outline: none;
+  border-color: #0078d4;
+  background-color: #fff;
+}
+
+.tenant-filter-clear {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.tenant-filter-clear:hover {
+  color: #333;
+}
+
+/* ========== Options List ========== */
+.tenant-filter-options {
+  overflow-y: auto;
+  flex: 1;
+  max-height: 350px;
+}
+
+.tenant-filter-options::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tenant-filter-options::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tenant-filter-options::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 3px;
+}
+
+.tenant-filter-options::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* ========== Option Item ========== */
+.tenant-filter-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  cursor: pointer;
+  border-left: 4px solid transparent;
+  transition: all 0.15s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tenant-filter-option:hover {
+  background-color: #f5f5f5;
+}
+
+.tenant-filter-option.selected {
+  background-color: #e8f4f8;
+  border-left-color: #0078d4;
+}
+
+.tenant-filter-option-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tenant-filter-option-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.tenant-filter-option-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tenant-filter-option-id {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tenant-filter-option-checkmark {
+  font-size: 14px;
+  color: #0078d4;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* ========== No Results ========== */
+.tenant-filter-no-results {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+  font-size: 13px;
+}
+
+/* ========== Overlay ========== */
+.tenant-filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  .tenant-filter-container {
+    max-width: 100%;
+  }
+
+  .tenant-filter-dropdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 350px;
+    max-height: 70vh;
+  }
+
+  .tenant-filter-option-content {
+    min-width: 0;
+  }
+
+  .tenant-filter-option-name {
+    max-width: 150px;
+  }
+}
+
+/* ========== Dark Mode Support (Optional) ========== */
+@media (prefers-color-scheme: dark) {
+  .tenant-filter-button {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border-color: #444;
+  }
+
+  .tenant-filter-button:hover {
+    background-color: #3d3d3d;
+    border-color: #0078d4;
+  }
+
+  .tenant-filter-dropdown {
+    background-color: #2d2d2d;
+    border-color: #444;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .tenant-filter-search {
+    background-color: #1a1a1a;
+    border-color: #444;
+    color: #e0e0e0;
+  }
+
+  .tenant-filter-search:focus {
+    background-color: #1a1a1a;
+  }
+
+  .tenant-filter-option {
+    color: #e0e0e0;
+    border-bottom-color: #3d3d3d;
+  }
+
+  .tenant-filter-option:hover {
+    background-color: #3d3d3d;
+  }
+
+  .tenant-filter-option.selected {
+    background-color: #1a3a42;
+  }
+
+  .tenant-filter-option-name {
+    color: #e0e0e0;
+  }
+}
