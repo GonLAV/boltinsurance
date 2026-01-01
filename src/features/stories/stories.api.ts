@@ -1,4 +1,4 @@
-import { apiClient, cachedGet } from '../../shared/services/apiClient';
+import { cachedGet } from '../../shared/services/apiClient';
 
 export type UserStory = {
   id: number;

@@ -108,26 +108,6 @@ const EditTestCasePage: React.FC = () => {
       return;
     }
 
-
-  const handleCopy = async () => {
-    try {
-      if (!testCase?.id) {
-        toast.error('Test case not loaded');
-        return;
-      }
-      const resp = await testCaseApi.cloneTestCase(Number(testCase.id));
-      if (resp?.data?.success) {
-        const newId = resp?.data?.data?.id;
-        toast.success(`✅ Copied test case #${testCase.id} → #${newId}`);
-        if (newId) navigate(`/app/edit-test/${newId}`);
-      } else {
-        toast.error(resp?.data?.message || 'Failed to copy test case');
-      }
-    } catch (err: any) {
-      console.error('Copy failed', err);
-      toast.error(err?.response?.data?.message || 'Failed to copy test case');
-    }
-  };
     try {
       setSaving(true);
       const workItemId = parseInt(testCaseId, 10);

@@ -4,30 +4,6 @@ import { MyTaskItem, storiesApi } from '../../stories/stories.api';
 import './DashboardView.css';
 import { metricsApi } from '../services/metrics.api';
 
-// ⚡ PERFORMANCE: Memoized task item component to prevent re-renders
-const TaskItemMemo: React.FC<{ task: MyTaskItem; onClick: (task: MyTaskItem) => void }> = React.memo(
-  ({ task, onClick }) => (
-    <div key={task.id} className="task-item" onClick={() => onClick(task)}>
-      <div className="task-header">
-        <span className="task-id">{task.id}</span>
-        <span className={`task-state state-${task.state.toLowerCase()}`}>{task.state}</span>
-      </div>
-      <div className="task-title">{task.title}</div>
-      {task.bugs && task.bugs.length > 0 && (
-        <div className="child-bugs">
-          <strong>Bugs ({task.bugs.length}):</strong>
-          {task.bugs.map((bug) => (
-            <div key={bug.id} className="bug-item">
-              #{bug.id}: {bug.title}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  ),
-  (prev, next) => prev.task.id === next.task.id && prev.task.state === next.task.state
-);
-
 const DashboardView: React.FC = () => {
   const [tasks, setTasks] = useState<MyTaskItem[]>([]);
   const [loading, setLoading] = useState(false);

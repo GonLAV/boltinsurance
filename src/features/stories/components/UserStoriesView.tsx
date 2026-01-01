@@ -4,19 +4,6 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { storiesApi, UserStory } from '../stories.api';
 
-// ⚡ PERFORMANCE: Progressive loading skeleton
-const ProgressiveSkeleton: React.FC = () => (
-  <div className="skeleton-loader">
-    {Array.from({ length: 3 }).map((_, i) => (
-      <div key={i} className="story-item">
-        <div className="skeleton-line skeleton-id"></div>
-        <div className="skeleton-line skeleton-title"></div>
-        <div className="skeleton-line skeleton-meta"></div>
-      </div>
-    ))}
-  </div>
-);
-
 // ⚡ PERFORMANCE: Enhanced skeleton loader with progress indicator
 const SkeletonLoader: React.FC<{ count?: number }> = ({ count = 8 }) => (
   <div>
@@ -39,27 +26,12 @@ const SkeletonLoader: React.FC<{ count?: number }> = ({ count = 8 }) => (
   </div>
 );
 
-// ⚡ PERFORMANCE: Memoized story item to prevent unnecessary re-renders
-const StoryItemMemo: React.FC<{ story: UserStory; onClick: () => void }> = React.memo(
-  ({ story, onClick }) => (
-    <div className="story-item" onClick={onClick}>
-      <div className="story-id">{story.id}</div>
-      <div className="story-title">{story.title}</div>
-      <div className="story-meta">
-        <span>{story.state}</span> | <span>{(story as any).relatedTestCases?.length ? '✓ Has Tests' : '✗ No Tests'}</span>
-      </div>
-    </div>
-  ),
-  (prev, next) => prev.story.id === next.story.id && (prev.story as any).relatedTestCases?.length === (next.story as any).relatedTestCases?.length
-);
-
 const UserStoriesView: React.FC = () => {
   const navigate = useNavigate();
   const [allStories, setAllStories] = useState<UserStory[]>([]);
   const [storiesNoTests, setStoriesNoTests] = useState<UserStory[]>([]);
   const [storiesWithTests, setStoriesWithTests] = useState<UserStory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [filter, setFilter] = useState<'all' | 'hasTests' | 'noTests'>('all');
   const [search, setSearch] = useState('');
   const deferredSearch = useDeferredValue(search);
@@ -71,12 +43,10 @@ const UserStoriesView: React.FC = () => {
     'Current', '2602', '2601', '2600', '2516', '2515', '2514', '2513', '2512', '2511'
   ], []);
   const didInitFetch = useRef(false);
-  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const fetchUserStories = useCallback(async () => {
     try {
       setLoading(true);
-      setLoadingMore(false);
       const effectiveOrgUrl = (localStorage.getItem('boltest:orgUrl') || '').trim();
       const effectiveProject = (localStorage.getItem('boltest:project') || 'Epos').trim();
       const effectiveAreaPath = areaPath.trim();
@@ -121,7 +91,6 @@ const UserStoriesView: React.FC = () => {
       setStoriesWithTests([]);
     } finally {
       setLoading(false);
-      setLoadingMore(false);
     }
   }, [areaPath, sprint]);
 

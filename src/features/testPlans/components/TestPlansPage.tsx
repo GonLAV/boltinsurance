@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { testPlansApi, TestPlan, TestSuite, SuiteEntry, TestPoint } from '../testPlans.api';
 import { testSuitesApi } from '../../testSuites/testSuites.api';
@@ -187,7 +187,7 @@ const TestPlansPage: React.FC = () => {
     loadSuiteEntries(id);
   };
 
-  const loadSuiteEntries = async (suiteId: number) => {
+  const loadSuiteEntries = useCallback(async (suiteId: number) => {
     if (!org || !project) {
       setError('Organization URL and Project are required');
       return;
@@ -278,7 +278,7 @@ const TestPlansPage: React.FC = () => {
     } finally {
       setLoadingCases(false);
     }
-  };
+  }, [org, project, backendKey, selectedPlanId]);
 
   const saveSuite = (e: React.FormEvent) => {
     e.preventDefault();
@@ -477,7 +477,7 @@ const TestPlansPage: React.FC = () => {
     if (activeTab === 'execute' && selectedSuiteId && testCases.length === 0) {
       loadSuiteEntries(selectedSuiteId);
     }
-  }, [activeTab]);
+  }, [activeTab, selectedSuiteId, testCases.length, loadSuiteEntries]);
 
   const startRun = async () => {
     if (!org || !project) {
