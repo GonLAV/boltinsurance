@@ -1,0 +1,796 @@
+<!-- Removed: Rich text editor has been integrated into the test case steps editor -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discussion Editor - Rich Text Component</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    /* Toolbar Styles */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 10px;
+      background: #f8f9fa;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px 8px 0 0;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .toolbar-btn {
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      background: white;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      color: #333;
+      min-width: 36px;
+      text-align: center;
+      position: relative;
+    }
+
+    .toolbar-btn:hover {
+      background: #e8e8e8;
+      border-color: #ccc;
+    }
+
+    .toolbar-btn:focus {
+      outline: 2px solid #667eea;
+      outline-offset: -2px;
+    }
+
+    .toolbar-btn.active {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .toolbar-divider {
+      width: 1px;
+      height: 24px;
+      background: #d0d0d0;
+      margin: 0 4px;
+    }
+
+    .toolbar-dropdown {
+      position: relative;
+    }
+
+    .dropdown-arrow {
+      font-size: 10px;
+      margin-left: 2px;
+    }
+
+    /* Color Picker */
+    .color-picker,
+    .emoji-picker,
+    .size-picker,
+    .more-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      margin-top: 4px;
+    }
+
+    .color-picker {
+      display: grid;
+      grid-template-columns: repeat(5, 32px);
+      gap: 6px;
+      padding: 10px;
+    }
+
+    .color-option {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .color-option:hover {
+      border-color: #333;
+      transform: scale(1.1);
+    }
+
+    #highlight-picker,
+    #underline-picker,
+    #emoji-picker,
+    #fontsize-picker,
+    #more-menu {
+      display: none;
+    }
+
+    .color-option[data-color="yellow"] { background-color: #ffff00; }
+    .color-option[data-color="lime"] { background-color: #00ff00; }
+    .color-option[data-color="cyan"] { background-color: #00ffff; }
+    .color-option[data-color="pink"] { background-color: #ffb6c1; }
+    .color-option[data-color="orange"] { background-color: #ffa500; }
+    .color-option[data-color="red"] { background-color: #ff0000; }
+    .color-option[data-color="blue"] { background-color: #0000ff; }
+    .color-option[data-color="green"] { background-color: #008000; }
+    .color-option[data-color="purple"] { background-color: #800080; }
+    .color-option[data-color="black"] { background-color: #000000; }
+
+    /* Emoji Picker */
+    .emoji-picker {
+      display: grid;
+      grid-template-columns: repeat(4, 40px);
+      gap: 4px;
+      padding: 10px;
+    }
+
+    .emoji-option {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .emoji-option:hover {
+      background: #f0f0f0;
+      transform: scale(1.2);
+    }
+
+    /* Size Picker */
+    .size-picker {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .size-option {
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      background: white;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .size-option:hover {
+      background: #f0f0f0;
+    }
+
+    /* More Menu */
+    .more-menu {
+      display: flex;
+      flex-direction: column;
+      min-width: 180px;
+    }
+
+    .menu-item {
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item:hover {
+      background: #f0f0f0;
+      padding-left: 20px;
+    }
+
+    /* Editor Wrapper */
+    .editor-wrapper {
+      border: 2px solid #e0e0e0;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      overflow: hidden;
+      background: white;
+      transition: border-color 0.3s ease;
+    }
+
+    .editor-wrapper:focus-within {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .editor {
+      min-height: 300px;
+      padding: 20px;
+      outline: none;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .editor p {
+      margin-bottom: 0.5em;
+    }
+
+    .editor code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    .editor mark {
+      padding: 0 2px;
+    }
+
+    /* Output Section */
+    .output-section {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .output-section h3 {
+      margin-bottom: 15px;
+      color: #333;
+      font-size: 16px;
+    }
+
+    #html-output {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      overflow-x: auto;
+      max-height: 300px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #666;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      .toolbar {
+        gap: 1px;
+        padding: 8px;
+      }
+
+      .toolbar-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+        min-width: 32px;
+      }
+
+      .editor {
+        min-height: 200px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💬 Discussion Editor</h1>
+    <p class="subtitle">Modern rich-text editor with inline toolbar (vanilla JS, no frameworks)</p>
+    
+    <!-- Toolbar -->
+    <div class="toolbar" role="toolbar" aria-label="Text formatting toolbar">
+      <!-- Text Style Buttons -->
+      <button class="toolbar-btn" id="bold-btn" title="Bold (Ctrl+B)" aria-label="Bold">
+        <strong>B</strong>
+      </button>
+      <button class="toolbar-btn" id="italic-btn" title="Italic (Ctrl+I)" aria-label="Italic">
+        <em>I</em>
+      </button>
+      <button class="toolbar-btn" id="underline-btn" title="Underline (Ctrl+U)" aria-label="Underline">
+        <u>U</u>
+      </button>
+      
+      <div class="toolbar-divider"></div>
+      
+      <!-- List Buttons -->
+      <button class="toolbar-btn" id="ul-btn" title="Bullet List" aria-label="Bullet List">
+        • List
+      </button>
+      <button class="toolbar-btn" id="ol-btn" title="Numbered List" aria-label="Numbered List">
+        1. List
+      </button>
+      
+      <div class="toolbar-divider"></div>
+      
+      <!-- Highlight Color -->
+      <div class="toolbar-dropdown">
+        <button class="toolbar-btn" id="highlight-btn" title="Highlight Color" aria-label="Highlight Color">
+          ▌<span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="color-picker" id="highlight-picker">
+          <div class="color-option" data-color="yellow" title="Yellow"></div>
+          <div class="color-option" data-color="lime" title="Lime"></div>
+          <div class="color-option" data-color="cyan" title="Cyan"></div>
+          <div class="color-option" data-color="pink" title="Pink"></div>
+          <div class="color-option" data-color="orange" title="Orange"></div>
+        </div>
+      </div>
+      
+      <!-- Underline Color -->
+      <div class="toolbar-dropdown">
+        <button class="toolbar-btn" id="underline-color-btn" title="Underline Color" aria-label="Underline Color">
+          A<span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="color-picker" id="underline-picker">
+          <div class="color-option" data-color="red" title="Red"></div>
+          <div class="color-option" data-color="blue" title="Blue"></div>
+          <div class="color-option" data-color="green" title="Green"></div>
+          <div class="color-option" data-color="purple" title="Purple"></div>
+          <div class="color-option" data-color="black" title="Black"></div>
+        </div>
+      </div>
+      
+      <div class="toolbar-divider"></div>
+      
+      <!-- Emoji Picker -->
+      <button class="toolbar-btn" id="emoji-btn" title="Insert Emoji" aria-label="Insert Emoji">
+        🙂
+      </button>
+      <div class="emoji-picker" id="emoji-picker">
+        <div class="emoji-option" data-emoji="😀">😀</div>
+        <div class="emoji-option" data-emoji="😂">😂</div>
+        <div class="emoji-option" data-emoji="❤️">❤️</div>
+        <div class="emoji-option" data-emoji="👍">👍</div>
+        <div class="emoji-option" data-emoji="🎉">🎉</div>
+        <div class="emoji-option" data-emoji="🚀">🚀</div>
+        <div class="emoji-option" data-emoji="✅">✅</div>
+        <div class="emoji-option" data-emoji="❌">❌</div>
+      </div>
+      
+      <div class="toolbar-divider"></div>
+      
+      <!-- Alignment -->
+      <button class="toolbar-btn" id="align-left-btn" title="Align Left" aria-label="Align Left">
+        ↤
+      </button>
+      <button class="toolbar-btn" id="align-right-btn" title="Align Right" aria-label="Align Right">
+        ↦
+      </button>
+      
+      <div class="toolbar-divider"></div>
+      
+      <!-- Code -->
+      <button class="toolbar-btn" id="code-btn" title="Code (Monospace)" aria-label="Code">
+        &lt;/&gt;
+      </button>
+      
+      <!-- Font Size -->
+      <div class="toolbar-dropdown">
+        <button class="toolbar-btn" id="fontsize-btn" title="Font Size" aria-label="Font Size">
+          Aa<span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="size-picker" id="fontsize-picker">
+          <div class="size-option" data-size="12">12px</div>
+          <div class="size-option" data-size="14">14px</div>
+          <div class="size-option" data-size="16">16px</div>
+          <div class="size-option" data-size="18">18px</div>
+          <div class="size-option" data-size="20">20px</div>
+          <div class="size-option" data-size="24">24px</div>
+        </div>
+      </div>
+      
+      <div class="toolbar-divider"></div>
+      
+      <!-- More Menu -->
+      <button class="toolbar-btn" id="more-btn" title="More Options" aria-label="More Options">
+        …
+      </button>
+      <div class="more-menu" id="more-menu">
+        <div class="menu-item" id="clear-fmt">Clear Formatting</div>
+        <div class="menu-item" id="strikethrough">Strikethrough</div>
+        <div class="menu-item" id="superscript">Superscript</div>
+        <div class="menu-item" id="subscript">Subscript</div>
+      </div>
+    </div>
+    
+    <!-- Editor -->
+    <div class="editor-wrapper">
+      <div 
+        class="editor" 
+        id="editor" 
+        contenteditable="true" 
+        role="textbox" 
+        aria-label="Rich text editor"
+        aria-multiline="true"
+      >
+        <p>Start typing or paste content here...</p>
+      </div>
+    </div>
+    
+    <!-- Output Display -->
+    <div class="output-section">
+      <h3>📋 HTML Output</h3>
+      <pre id="html-output"><p>Start typing or paste content here...</p></pre>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // EDITOR CORE - Selection/Range Helpers
+    // ============================================
+    
+    const editor = document.getElementById('editor');
+    const htmlOutput = document.getElementById('html-output');
+    let savedSelection = null;
+
+    /**
+     * Get current selection range if it's inside the editor
+     * @returns {Range|null}
+     */
+    function getRangeInEditor() {
+      const sel = window.getSelection();
+      if (!sel.rangeCount || sel.isCollapsed && !sel.anchorNode?.closest('#editor')) return null;
+      
+      const range = sel.getRangeAt(0);
+      if (!editor.contains(range.commonAncestorContainer)) return null;
+      
+      return range;
+    }
+
+    /**
+     * Save current selection for later restoration
+     */
+    function saveSelection() {
+      const sel = window.getSelection();
+      if (sel.rangeCount > 0) {
+        savedSelection = sel.getRangeAt(0);
+      }
+    }
+
+    /**
+     * Restore previously saved selection
+     */
+    function restoreSelection() {
+      if (savedSelection) {
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(savedSelection);
+      }
+    }
+
+    /**
+     * Wrap selected text in a tag
+     * @param {string} tag - HTML tag name (e.g., 'strong', 'em', 'mark')
+     * @param {object} attrs - Attributes (e.g., {style: "color: red"})
+     */
+    function wrapSelection(tag, attrs = {}) {
+      const range = getRangeInEditor();
+      if (!range) return;
+
+      const span = document.createElement(tag);
+      Object.assign(span, attrs);
+      
+      try {
+        range.surroundContents(span);
+        editor.focus();
+      } catch (e) {
+        // For complex selections, use extractContents
+        const contents = range.extractContents();
+        span.appendChild(contents);
+        range.insertNode(span);
+        editor.focus();
+      }
+      updateOutput();
+    }
+
+    /**
+     * Unwrap tags from selection
+     * @param {string[]} tagNames - Tag names to remove
+     */
+    function unwrapSelection(tagNames) {
+      const range = getRangeInEditor();
+      if (!range) return;
+
+      const contents = range.extractContents();
+      
+      tagNames.forEach(tag => {
+        const elements = contents.querySelectorAll(tag);
+        elements.forEach(el => {
+          while (el.firstChild) {
+            el.parentNode.insertBefore(el.firstChild, el);
+          }
+          el.parentNode.removeChild(el);
+        });
+      });
+      
+      range.insertNode(contents);
+      editor.focus();
+      updateOutput();
+    }
+
+    // ============================================
+    // TEXT FORMATTING FUNCTIONS
+    // ============================================
+
+    function applyBold() {
+      wrapSelection('strong');
+    }
+
+    function applyItalic() {
+      wrapSelection('em');
+    }
+
+    function applyUnderline() {
+      wrapSelection('u');
+    }
+
+    function toggleCodeInline() {
+      const range = getRangeInEditor();
+      if (!range) return;
+
+      const code = range.startContainer.closest('code');
+      if (code) {
+        unwrapSelection(['code']);
+      } else {
+        wrapSelection('code');
+      }
+    }
+
+    function setHighlight(color) {
+      const colorMap = {
+        'yellow': '#FFFF00',
+        'lime': '#00FF00',
+        'cyan': '#00FFFF',
+        'pink': '#FFB6C1',
+        'orange': '#FFA500'
+      };
+      
+      wrapSelection('mark', {
+        style: `background-color: ${colorMap[color] || color};`
+      });
+      closeAllMenus();
+    }
+
+    function setUnderlineColor(color) {
+      const colorMap = {
+        'red': '#FF0000',
+        'blue': '#0000FF',
+        'green': '#008000',
+        'purple': '#800080',
+        'black': '#000000'
+      };
+      
+      wrapSelection('span', {
+        style: `text-decoration: underline; text-decoration-color: ${colorMap[color] || color};`
+      });
+      closeAllMenus();
+    }
+
+    function insertEmoji(emoji) {
+      const sel = window.getSelection();
+      const range = getRangeInEditor();
+      if (!range) return;
+
+      const text = document.createTextNode(emoji);
+      range.insertNode(text);
+      range.setStartAfter(text);
+      range.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(range);
+      editor.focus();
+      updateOutput();
+      closeAllMenus();
+    }
+
+    function setFontSize(px) {
+      wrapSelection('span', {
+        style: `font-size: ${px}px;`
+      });
+      closeAllMenus();
+    }
+
+    function toggleList(type) {
+      const range = getRangeInEditor();
+      if (!range) return;
+
+      const block = range.startContainer.closest('li, p, div');
+      if (!block) return;
+
+      const tagName = type === 'ul' ? 'UL' : 'OL';
+      let list = block.closest('ul, ol');
+
+      if (list && list.tagName === tagName) {
+        // Remove list
+        const items = Array.from(list.querySelectorAll('li'));
+        const parent = list.parentNode;
+        
+        items.forEach(li => {
+          const p = document.createElement('p');
+          p.innerHTML = li.innerHTML;
+          parent.insertBefore(p, list);
+        });
+        parent.removeChild(list);
+      } else {
+        // Create list
+        const list = document.createElement(tagName);
+        const li = document.createElement('li');
+        li.innerHTML = block.innerHTML;
+        list.appendChild(li);
+        block.parentNode.replaceChild(list, block);
+      }
+
+      editor.focus();
+      updateOutput();
+    }
+
+    function alignText(direction) {
+      const range = getRangeInEditor();
+      if (!range) return;
+
+      const block = range.startContainer.closest('p, div, li') || document.createElement('div');
+      block.style.textAlign = direction;
+      editor.focus();
+      updateOutput();
+    }
+
+    function clearFormatting() {
+      const range = getRangeInEditor();
+      if (!range) return;
+
+      const span = document.createElement('span');
+      span.textContent = range.toString();
+      range.deleteContents();
+      range.insertNode(span);
+      editor.focus();
+      updateOutput();
+      closeAllMenus();
+    }
+
+    function toggleStrikethrough() {
+      wrapSelection('del');
+      closeAllMenus();
+    }
+
+    function applySuperscript() {
+      wrapSelection('sup');
+      closeAllMenus();
+    }
+
+    function applySubscript() {
+      wrapSelection('sub');
+      closeAllMenus();
+    }
+
+    // ============================================
+    // UI HELPERS
+    // ============================================
+
+    function closeAllMenus() {
+      document.querySelectorAll('.color-picker, .emoji-picker, .size-picker, .more-menu').forEach(m => {
+        m.style.display = 'none';
+      });
+    }
+
+    function toggleMenu(menuId) {
+      closeAllMenus();
+      const menu = document.getElementById(menuId);
+      menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function updateOutput() {
+      htmlOutput.textContent = editor.innerHTML;
+    }
+
+    // ============================================
+    // EVENT LISTENERS - Toolbar Buttons
+    // ============================================
+
+    document.getElementById('bold-btn').addEventListener('click', applyBold);
+    document.getElementById('italic-btn').addEventListener('click', applyItalic);
+    document.getElementById('underline-btn').addEventListener('click', applyUnderline);
+    document.getElementById('ul-btn').addEventListener('click', () => toggleList('ul'));
+    document.getElementById('ol-btn').addEventListener('click', () => toggleList('ol'));
+    document.getElementById('code-btn').addEventListener('click', toggleCodeInline);
+
+    // Dropdowns
+    document.getElementById('highlight-btn').addEventListener('click', () => toggleMenu('highlight-picker'));
+    document.getElementById('underline-color-btn').addEventListener('click', () => toggleMenu('underline-picker'));
+    document.getElementById('emoji-btn').addEventListener('click', () => toggleMenu('emoji-picker'));
+    document.getElementById('fontsize-btn').addEventListener('click', () => toggleMenu('fontsize-picker'));
+    document.getElementById('more-btn').addEventListener('click', () => toggleMenu('more-menu'));
+
+    // Alignment
+    document.getElementById('align-left-btn').addEventListener('click', () => alignText('left'));
+    document.getElementById('align-right-btn').addEventListener('click', () => alignText('right'));
+
+    // Color Picker Options
+    document.querySelectorAll('#highlight-picker .color-option').forEach(btn => {
+      btn.addEventListener('click', (e) => setHighlight(e.target.dataset.color));
+    });
+
+    document.querySelectorAll('#underline-picker .color-option').forEach(btn => {
+      btn.addEventListener('click', (e) => setUnderlineColor(e.target.dataset.color));
+    });
+
+    // Emoji Options
+    document.querySelectorAll('#emoji-picker .emoji-option').forEach(btn => {
+      btn.addEventListener('click', (e) => insertEmoji(e.target.dataset.emoji));
+    });
+
+    // Font Size Options
+    document.querySelectorAll('#fontsize-picker .size-option').forEach(btn => {
+      btn.addEventListener('click', (e) => setFontSize(e.target.dataset.size));
+    });
+
+    // More Menu Items
+    document.getElementById('clear-fmt').addEventListener('click', clearFormatting);
+    document.getElementById('strikethrough').addEventListener('click', toggleStrikethrough);
+    document.getElementById('superscript').addEventListener('click', applySuperscript);
+    document.getElementById('subscript').addEventListener('click', applySubscript);
+
+    // Close menus when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.toolbar')) {
+        closeAllMenus();
+      }
+    });
+
+    // Close menus on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAllMenus();
+      }
+    });
+
+    // Update output on input
+    editor.addEventListener('input', updateOutput);
+    editor.addEventListener('keyup', updateOutput);
+
+    // Initialize
+    updateOutput();
+  </script>
+</body>
+</html>

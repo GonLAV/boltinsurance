@@ -1,0 +1,343 @@
+/* StepItem.css - layout for the two-card step rows */
+
+.step-item {
+  background: linear-gradient(135deg, #001122 0%, #002244 25%, #003366 50%, #002244 75%, #001122 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+.step-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5f5;
+  font-weight: 600;
+}
+
+.drag-handle {
+  font-size: 20px;
+  cursor: grab;
+}
+
+.step-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-step-action {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #f8fafc;
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-step-action:hover {
+  transform: translateY(-2px);
+  background: rgba(250, 250, 250, 0.2);
+}
+
+.step-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 992px) {
+  .step-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.step-card {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgba(0, 17, 34, 0.6) 0%, rgba(0, 34, 68, 0.6) 50%, rgba(0, 51, 102, 0.5) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  min-height: 220px;
+  padding: 14px 16px;
+  gap: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 18px 35px rgba(0, 102, 204, 0.15);
+  position: relative;
+  overflow: hidden;
+  color: #f8fafc;
+}
+
+.step-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 18px;
+  pointer-events: none;
+  box-shadow: 0 0 24px rgba(6, 20, 60, 0.8);
+}
+
+.step-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #dbeafe;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card-title::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.10) 50%, transparent 70%);
+  animation: tc-shimmer 3s infinite;
+}
+
+@keyframes tc-shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.step-card-prompt {
+  background: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 11px;
+}
+
+.step-card--invalid {
+  border-color: rgba(248, 113, 113, 0.5);
+}
+
+.step-attachment-wrapper {
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.step-attachment-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.step-attachment-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-attachment {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0f2fe;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.attach-label {
+  font-size: 12px;
+}
+
+.btn-secondary,
+.btn-cancel {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #cbd5f5;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.attachment-preview {
+  display: flex;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.attachment-uploading {
+  color: #a5b4fc;
+}
+
+.file-input-hidden {
+  display: none;
+}
+
+.preview-content {
+  width: 100%;
+}
+
+.preview-icon {
+  text-align: center;
+  padding: 16px;
+  cursor: pointer;
+  background: #0d1b3a;
+  border: 2px solid rgba(99, 102, 241, 0.35);
+  border-radius: 8px;
+}
+
+.preview-icon .preview-icon-category {
+  font-size: 48px;
+}
+
+.preview-icon .preview-icon-label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+  color: #dbeafe;
+}
+
+.preview-icon .preview-icon-name {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.step-viewer-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.step-viewer-panel {
+  background: #070b1e;
+  border-radius: 12px;
+  padding: 16px;
+  width: min(900px, 96vw);
+  height: min(90vh, 90vh);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.step-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-viewer-header-left {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.step-viewer-header-icon {
+  font-size: 20px;
+}
+
+.step-viewer-header-title {
+  font-weight: 700;
+}
+
+.step-viewer-header-type {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.step-viewer-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.step-viewer-body {
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-viewer-generic {
+  text-align: center;
+  color: #cbd5e0;
+  padding: 24px;
+}
+
+.step-viewer-generic-icon {
+  font-size: 48px;
+}
+
+.step-viewer-generic-title {
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.step-viewer-generic-desc {
+  margin-top: 6px;
+}
+
+.step-image-preview {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid rgba(148, 163, 184, 0.6);
+  border-radius: 8px;
+}
+
+.step-image-error {
+  padding: 12px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.step-viewer-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.step-viewer-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}

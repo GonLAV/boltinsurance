@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { testPlansApi, TestPlan, TestSuite, SuiteEntry, TestPoint } from '../testPlans.api';
 import { testSuitesApi } from '../../testSuites/testSuites.api';
 import './TestPlansPage.css';
@@ -11,6 +12,7 @@ type LocalTestCase = {
   status: 'Ready' | 'Active' | 'Passed' | 'Failed' | 'NotRun';
   parentSuiteId: number | null;
   order: number;
+  tags?: string[];
 };
 
 const buildTree = (suites: TestSuite[]): TestSuite[] => {
@@ -31,6 +33,7 @@ const buildTree = (suites: TestSuite[]): TestSuite[] => {
 };
 
 const TestPlansPage: React.FC = () => {
+  const navigate = useNavigate();
   const [org, setOrg] = useState(localStorage.getItem('boltest:org') || '');
   const [project, setProject] = useState(localStorage.getItem('boltest:project') || '');
   const [backendKey, setBackendKey] = useState(localStorage.getItem('boltest:backendKey') || '');
@@ -52,6 +55,7 @@ const TestPlansPage: React.FC = () => {
 
   const [showSuiteModal, setShowSuiteModal] = useState(false);
   const [showCaseModal, setShowCaseModal] = useState(false);
+  const [editingCaseId, setEditingCaseId] = useState<string | null>(null);
   const [showAddExistingModal, setShowAddExistingModal] = useState(false);
   const [existingCaseIds, setExistingCaseIds] = useState('');
   const [addingExisting, setAddingExisting] = useState(false);
@@ -212,11 +216,34 @@ const TestPlansPage: React.FC = () => {
             priority: 'Medium',
             status: 'Ready',
             parentSuiteId: suiteId,
-            order
+            order,
+            tags: []
           } as LocalTestCase;
         })
         .filter(Boolean) as LocalTestCase[];
       setTestCases(mapped);
+      // Fetch tags for cases in this suite
+      try {
+        const ids = mapped.map((m) => Number(m.id)).filter((n) => Number.isFinite(n));
+        if (ids.length) {
+          const dRes = await testPlansApi.getTestCaseDetails({
+            org,
+            project,
+            ids,
+            fields: ['System.Id', 'System.WorkItemType', 'System.Title', 'System.Tags', 'System.AssignedTo', 'Microsoft.VSTS.Common.Priority'],
+            backendKey: backendKey || undefined
+          });
+          const items = dRes.data?.data?.items || [];
+          const tagMap: Record<string, string[]> = {};
+          items.forEach((it: any) => {
+            const arr = Array.isArray(it.tags) ? it.tags : [];
+            tagMap[String(it.id)] = arr;
+          });
+          setTestCases((prev) => prev.map((tc) => ({ ...tc, tags: tagMap[tc.id] || [] })));
+        }
+      } catch (tagErr: any) {
+        setToast(tagErr?.response?.data?.message || 'Failed to load tags');
+      }
       // Fetch test points for this plan/suite to map case -> point and latest outcome
       if (selectedPlanId) {
         try {
@@ -283,6 +310,25 @@ const TestPlansPage: React.FC = () => {
       return;
     }
     const suiteIdNum = Number(caseForm.suiteId);
+    if (editingCaseId) {
+      setTestCases((prev) => prev.map((tc) => {
+        if (tc.id !== editingCaseId) return tc;
+        return {
+          ...tc,
+          title: caseForm.title.trim(),
+          assignedTo: caseForm.assignedTo.trim() || undefined,
+          priority: caseForm.priority as LocalTestCase['priority'],
+          parentSuiteId: suiteIdNum
+        };
+      }));
+      setEditingCaseId(null);
+      setCaseForm({ title: '', suiteId: '', priority: 'Medium', assignedTo: '', steps: '', description: '' });
+      setShowCaseModal(false);
+      setSelectedSuiteId((current) => current ?? suiteIdNum);
+      setToast('Test case updated locally');
+      return;
+    }
+
     const nextOrder = testCases.filter((tc) => tc.parentSuiteId === suiteIdNum).length + 1;
     const newCase: LocalTestCase = {
       id: `TC-${Date.now()}`,
@@ -298,6 +344,73 @@ const TestPlansPage: React.FC = () => {
     setShowCaseModal(false);
     setSelectedSuiteId((current) => current ?? suiteIdNum);
     setToast('Test case added locally');
+  };
+
+  const runSingleCase = (tc: LocalTestCase) => {
+    if (!selectedSuiteId) {
+      setToast('Select a suite first');
+      return;
+    }
+    setShowFailedOnly(false);
+    setActiveTab('execute');
+    setFocusedCaseId(tc.id);
+  };
+
+  const editCase = (tc: LocalTestCase) => {
+    if (/^\d+$/.test(tc.id)) {
+      navigate(`/app/edit-test/${tc.id}`);
+      return;
+    }
+
+    setEditingCaseId(tc.id);
+    setCaseForm({
+      title: tc.title,
+      suiteId: String(tc.parentSuiteId ?? selectedSuiteId ?? ''),
+      priority: tc.priority,
+      assignedTo: tc.assignedTo || '',
+      steps: '',
+      description: ''
+    });
+    setShowCaseModal(true);
+  };
+
+  const exportVisibleCases = () => {
+    const rows = filteredCases;
+    if (!rows.length) {
+      setToast('No test cases to export');
+      return;
+    }
+
+    const esc = (v: unknown) => {
+      const s = String(v ?? '');
+      if (/[",\n\r]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+      return s;
+    };
+
+    const header = ['id', 'title', 'assignedTo', 'priority', 'status', 'order', 'tags'];
+    const lines = [header.join(',')];
+    rows.forEach((tc) => {
+      lines.push([
+        esc(tc.id),
+        esc(tc.title),
+        esc(tc.assignedTo || ''),
+        esc(tc.priority),
+        esc(tc.status),
+        esc(tc.order ?? ''),
+        esc((tc.tags || []).join('; '))
+      ].join(','));
+    });
+
+    const blob = new Blob([lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `testcases_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    setToast('Export started');
   };
 
   const handleAddExistingCases = async (e: React.FormEvent) => {
@@ -511,7 +624,7 @@ const TestPlansPage: React.FC = () => {
             <div className="sidebar-section-title">Navigation</div>
             <button className="sidebar-item">
               <span className="sidebar-icon">📊</span>
-              <span>Overview</span>
+              <span>Dashboard</span>
             </button>
             <button className="sidebar-item">
               <span className="sidebar-icon">📋</span>
@@ -675,7 +788,15 @@ const TestPlansPage: React.FC = () => {
                 <div className="split-right">
                   <div className="toolbar">
                     <div className="toolbar-left">
-                      <button className="btn btn-primary" onClick={() => setShowCaseModal(true)} disabled={!selectedSuiteId}>
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          setEditingCaseId(null);
+                          setCaseForm({ title: '', suiteId: String(selectedSuiteId ?? ''), priority: 'Medium', assignedTo: '', steps: '', description: '' });
+                          setShowCaseModal(true);
+                        }}
+                        disabled={!selectedSuiteId}
+                      >
                         <span>➕</span>
                         <span>New Test Case</span>
                       </button>
@@ -683,7 +804,7 @@ const TestPlansPage: React.FC = () => {
                         <span>📥</span>
                         <span>Add Existing</span>
                       </button>
-                      <button className="btn" disabled>
+                      <button className="btn" onClick={exportVisibleCases} disabled={!filteredCases.length}>
                         <span>📤</span>
                         <span>Export</span>
                       </button>
@@ -772,10 +893,10 @@ const TestPlansPage: React.FC = () => {
                                 <span className={`status-badge status-${tc.status.toLowerCase()}`}>{tc.status}</span>
                               </td>
                               <td className="actions">
-                                <button className="action-btn" title="Run Test" onClick={() => setToast('Run is not wired yet')}>
+                                <button className="action-btn" title="Run Test" onClick={() => runSingleCase(tc)}>
                                   ▶️
                                 </button>
-                                <button className="action-btn" title="Edit" onClick={() => setToast('Edit is not wired yet')}>
+                                <button className="action-btn" title="Edit" onClick={() => editCase(tc)}>
                                   ✏️
                                 </button>
                                 <button
@@ -804,8 +925,7 @@ const TestPlansPage: React.FC = () => {
               <div className="toolbar">
                 <div className="toolbar-left">
                   <input
-                    className="form-input"
-                    style={{ maxWidth: 360 }}
+                    className="form-input input-max-360"
                     value={runName}
                     onChange={(e) => setRunName(e.target.value)}
                     placeholder="Manual Run name"
@@ -826,7 +946,7 @@ const TestPlansPage: React.FC = () => {
                 </div>
                 <div className="toolbar-right">
                   {activeRunId && (
-                    <span className="muted" style={{ marginRight: 12 }}>Run #{activeRunId}</span>
+                    <span className="muted mr-12">Run #{activeRunId}</span>
                   )}
                   <label className="muted">
                     <input type="checkbox"
@@ -836,7 +956,7 @@ const TestPlansPage: React.FC = () => {
                     />
                     Failed-only
                   </label>
-                  <span className="muted" style={{ marginRight: 12 }}>
+                  <span className="muted mr-12">
                     P:{counters.passed} F:{counters.failed} B:{counters.blocked} N:{counters.notrun} / {counters.total}
                   </span>
                   <button className="btn btn-primary" onClick={submitResults} disabled={!activeRunId || submittingResults}>
@@ -851,6 +971,7 @@ const TestPlansPage: React.FC = () => {
                     <tr>
                       <th>Case</th>
                       <th className="id-cell">ID</th>
+                      <th>Tags</th>
                       <th>Status</th>
                       <th>Notes</th>
                       <th>Actions</th>
@@ -872,6 +993,17 @@ const TestPlansPage: React.FC = () => {
                       <tr key={`exec-${tc.id}`} className={focusedCaseId === tc.id ? 'selected' : ''} onClick={() => setFocusedCaseId(tc.id)}>
                         <td>{tc.title}</td>
                         <td className="id-cell">{tc.id}{pointByCase[tc.id] ? <span className="muted"> (P{pointByCase[tc.id].id})</span> : null}</td>
+                        <td>
+                          {(tc.tags || []).length ? (
+                            <div className="tag-list">
+                              {(tc.tags || []).map((t) => (
+                                <span key={`${tc.id}-tag-${t}`} className="tag-chip">{t}</span>
+                              ))}
+                            </div>
+                          ) : (
+                            <span className="muted">—</span>
+                          )}
+                        </td>
                         <td>
                           {outcomes[tc.id] ? (
                             <span className={`status-badge status-${(outcomes[tc.id] || '').toLowerCase()}`}>{outcomes[tc.id]}</span>

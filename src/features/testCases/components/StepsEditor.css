@@ -1,0 +1,161 @@
+/* StepsEditor.css - extracted from StepsEditor.tsx inline styles */
+
+.inline-toolbar {
+  position: fixed;
+  display: none;
+  gap: 8px;
+  background: rgba(11, 18, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  box-shadow: 0 12px 34px rgba(0,0,0,0.35);
+  padding: 6px 10px;
+  z-index: 2000;
+  align-items: center;
+}
+
+.inline-toolbar button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background 0.15s;
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.inline-toolbar button:focus {
+  outline: 2px solid rgba(0, 102, 204, 0.70);
+}
+
+.inline-toolbar button[aria-label*="Color"] {
+  font-size: 18px;
+}
+
+.steps-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #718096;
+  padding: 40px 0;
+}
+
+body.dark-mode .empty-state {
+  color: #a0aec0;
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.empty-state-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.empty-state-text {
+  font-size: 14px;
+}
+
+.step-draggable {
+  transition: opacity 0.2s;
+}
+
+.step-draggable.dragging {
+  opacity: 0.5;
+}
+
+/* Steps toolbar (replaces Tailwind-only styling so dark mode works) */
+.steps-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+body.dark-mode .steps-toolbar {
+  border-color: rgba(255, 255, 255, 0.10);
+  background: rgba(26, 32, 44, 0.70);
+}
+
+.steps-toolbar-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  color: #ffffff;
+  font-weight: 700;
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.18);
+}
+
+.steps-toolbar-add:hover { filter: brightness(1.03); }
+
+.steps-toolbar-right { margin-left: auto; display: flex; align-items: center; }
+
+.steps-toolbar-modes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .steps-toolbar-modes {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(11, 18, 32, 0.55);
+}
+
+.steps-toolbar-mode,
+.steps-toolbar-extract {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+  color: #475569;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+body.dark-mode .steps-toolbar-mode,
+body.dark-mode .steps-toolbar-extract {
+  color: #cbd5e0;
+}
+
+.steps-toolbar-mode:hover,
+.steps-toolbar-extract:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.dark-mode .steps-toolbar-mode:hover,
+body.dark-mode .steps-toolbar-extract:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.steps-toolbar-mode.active.visual {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+  color: #ffffff;
+}
+
+.steps-toolbar-mode.active.raw {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  color: #ffffff;
+}

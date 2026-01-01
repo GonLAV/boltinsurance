@@ -1,0 +1,13 @@
+{
+  // Goal: keep VS Code Problems panel clean for this workspace.
+  // Many diagnostics below come from optional extensions (SonarLint/markdownlint).
+  "sonarlint.disable": true,
+  "markdownlint.ignore": ["**/*.md"],
+  "markdownlint.run": "never",
+  "markdownlint.lintWorkspace": false,
+  "markdownlint.enable": false,
+
+  // Keep core tooling enabled.
+  "eslint.enable": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false
+}
