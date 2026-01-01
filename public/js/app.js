@@ -13,6 +13,7 @@ let isBulkEditMode = false;
 // Utility functions
 /**
  * Debounce function for performance optimization
+ * Used for input handlers to reduce unnecessary processing
  */
 function debounce(func, wait) {
   let timeout;
@@ -25,18 +26,6 @@ function debounce(func, wait) {
     timeout = setTimeout(later, wait);
   };
 }
-
-// Initialize app on load
-document.addEventListener('DOMContentLoaded', function() {
-  // Check if user is already logged in
-  if (window.azureAPI.loadFromSession()) {
-    showMainApp();
-    loadTestCases();
-  }
-  
-  // Add initial step when creating test case
-  addStep();
-});
 
 // ===================================
 // LOGIN & CONNECTION FUNCTIONS
@@ -1158,7 +1147,7 @@ window.downloadResponse = function() {
 // ===================================
 
 /**
- * Add real-time validation feedback
+ * Add real-time validation feedback using CSS classes
  */
 function setupInputValidation() {
   const titleInput = document.getElementById('title');
@@ -1167,12 +1156,12 @@ function setupInputValidation() {
   if (titleInput) {
     titleInput.addEventListener('input', (e) => {
       const value = e.target.value.trim();
+      e.target.classList.remove('valid', 'warning', 'error');
+      
       if (value.length > 0 && value.length < 5) {
-        e.target.style.borderColor = '#f59e0b'; // Warning color
+        e.target.classList.add('warning');
       } else if (value.length >= 5) {
-        e.target.style.borderColor = '#10b981'; // Success color
-      } else {
-        e.target.style.borderColor = '';
+        e.target.classList.add('valid');
       }
     });
   }
@@ -1180,20 +1169,28 @@ function setupInputValidation() {
   if (descInput) {
     descInput.addEventListener('input', (e) => {
       const value = e.target.value.trim();
+      e.target.classList.remove('valid', 'warning', 'error');
+      
       if (value.length > 0 && value.length < 10) {
-        e.target.style.borderColor = '#f59e0b';
+        e.target.classList.add('warning');
       } else if (value.length >= 10) {
-        e.target.style.borderColor = '#10b981';
-      } else {
-        e.target.style.borderColor = '';
+        e.target.classList.add('valid');
       }
     });
   }
 }
 
-// Initialize validation when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setupInputValidation);
-} else {
+// Consolidate initialization
+document.addEventListener('DOMContentLoaded', function() {
+  // Check if user is already logged in
+  if (window.azureAPI.loadFromSession()) {
+    showMainApp();
+    loadTestCases();
+  }
+  
+  // Add initial step when creating test case
+  addStep();
+  
+  // Setup input validation
   setupInputValidation();
-}
+});

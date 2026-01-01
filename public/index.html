@@ -2,7 +2,7 @@
 <html lang="en" class="h-full">
  <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="BOLTEST - Test Case Management Tool for Azure DevOps and TFS. Create, manage, and track test cases with ease.">
   <meta name="theme-color" content="#22c1c3">
   <title>BOLTEST - Test Case Manager for Azure DevOps & TFS</title>
@@ -211,6 +211,20 @@
       font-size: 14px;
       transition: all 0.2s ease;
       font-family: 'Inter', sans-serif;
+    }
+    
+    /* Validation states */
+    .form-input.valid, .form-textarea.valid {
+      border-color: #10b981;
+    }
+    
+    .form-input.warning, .form-textarea.warning {
+      border-color: #f59e0b;
+    }
+    
+    .form-input.error, .form-textarea.error {
+      border-color: #ef4444;
+    }
     }
 
     .form-input:focus, .form-select:focus, .form-textarea:focus {
