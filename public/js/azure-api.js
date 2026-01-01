@@ -162,11 +162,16 @@ class AzureDevOpsAPI {
         });
       }
 
-      // Senior architecture: call Next.js API route server-side, no local proxy
+      // Use the server proxy to make the request
       const response = await fetch('/api/testcase/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(patchDocument)
+        body: JSON.stringify({
+          pat: this.pat,
+          orgUrl: this.baseUrl,
+          projectName: this.project,
+          patch: patchDocument
+        })
       });
 
       if (response.ok) {

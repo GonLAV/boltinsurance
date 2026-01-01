@@ -10,6 +10,22 @@ let currentSteps = [];
 let draggedStepId = null;
 let isBulkEditMode = false;
 
+// Utility functions
+/**
+ * Debounce function for performance optimization
+ */
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
 // Initialize app on load
 document.addEventListener('DOMContentLoaded', function() {
   // Check if user is already logged in
@@ -155,15 +171,40 @@ function updateDashboard() {
  * Load test cases from Azure DevOps
  */
 async function loadTestCases() {
-  const result = await window.azureAPI.getTestCases();
-  
-  if (result.success) {
-    allTestCases = result.data;
-    updateDashboard();
-    renderTestCasesList();
-    updateEmptyStates();
-  } else {
-    showToast(`Failed to load test cases: ${result.error}`, "error");
+  try {
+    // Show loading indicator in dashboard
+    const totalEl = document.getElementById('totalTestCases');
+    const activeEl = document.getElementById('activeTestCases');
+    const designEl = document.getElementById('designTestCases');
+    
+    if (totalEl) totalEl.innerHTML = '<span style="opacity: 0.5">...</span>';
+    if (activeEl) activeEl.innerHTML = '<span style="opacity: 0.5">...</span>';
+    if (designEl) designEl.innerHTML = '<span style="opacity: 0.5">...</span>';
+    
+    const result = await window.azureAPI.getTestCases();
+    
+    if (result.success) {
+      allTestCases = result.data;
+      updateDashboard();
+      renderTestCasesList();
+      updateEmptyStates();
+    } else {
+      // More user-friendly error messages
+      let errorMsg = result.error || 'Unknown error';
+      if (errorMsg.includes('401') || errorMsg.includes('Unauthorized')) {
+        errorMsg = 'Authentication failed. Please log in again.';
+      } else if (errorMsg.includes('404')) {
+        errorMsg = 'Project not found. Please verify your settings.';
+      }
+      showToast(`❌ Failed to load test cases: ${errorMsg}`, "error");
+      
+      // Reset counters to 0 on error
+      if (totalEl) totalEl.textContent = '0';
+      if (activeEl) activeEl.textContent = '0';
+      if (designEl) designEl.textContent = '0';
+    }
+  } catch (error) {
+    showToast(`❌ Unexpected error loading test cases: ${error.message}`, "error");
   }
 }
 
@@ -632,43 +673,75 @@ document.getElementById('testCaseForm').addEventListener('submit', async (e) => 
     syncFromBulkEdit();
   }
 
+  // Validate steps
+  if (currentSteps.length === 0) {
+    showToast("Please add at least one test step", "error");
+    return;
+  }
+
+  // Validate that all steps have action and expected result
+  const invalidSteps = currentSteps.filter(step => !step.action.trim() || !step.expected.trim());
+  if (invalidSteps.length > 0) {
+    showToast("Please fill in all test step actions and expected results", "error");
+    return;
+  }
+
   const submitBtn = document.getElementById('submitBtn');
+  const originalText = submitBtn.innerHTML;
+  submitBtn.innerHTML = '⏳ Saving...';
   submitBtn.classList.add('btn-loading');
   submitBtn.disabled = true;
 
-  // Collect steps
-  const steps = currentSteps.map(step => ({
-    action: step.action,
-    expected: step.expected,
-    attachment: step.attachment
-  }));
+  try {
+    // Collect steps
+    const steps = currentSteps.map(step => ({
+      action: step.action,
+      expected: step.expected,
+      attachment: step.attachment
+    }));
 
-  const testCaseData = {
-    title: document.getElementById('title').value,
-    description: document.getElementById('description').value,
-    state: document.getElementById('state').value,
-    areaPath: document.getElementById('areaPath').value,
-    iterationPath: document.getElementById('iterationPath').value,
-    priority: document.getElementById('priority').value,
-    automationStatus: document.getElementById('automationStatus').value,
-    tags: document.getElementById('tags').value,
-    steps: steps
-  };
+    const testCaseData = {
+      title: document.getElementById('title').value,
+      description: document.getElementById('description').value,
+      state: document.getElementById('state').value,
+      areaPath: document.getElementById('areaPath').value,
+      iterationPath: document.getElementById('iterationPath').value,
+      priority: document.getElementById('priority').value,
+      automationStatus: document.getElementById('automationStatus').value,
+      tags: document.getElementById('tags').value,
+      steps: steps
+    };
 
-  // Create test case in Azure DevOps
-  const result = await window.azureAPI.createTestCase(testCaseData);
+    // Create test case in Azure DevOps
+    const result = await window.azureAPI.createTestCase(testCaseData);
 
-  if (result.success) {
-    showToast("Test case created successfully in Azure DevOps!", "success");
-    resetForm();
-    switchPage('list');
-    loadTestCases(); // Reload list
-  } else {
-    showToast(`Failed to create test case: ${result.error}`, "error");
+    if (result.success) {
+      showToast("✅ Test case created successfully in Azure DevOps!", "success");
+      resetForm();
+      switchPage('list');
+      loadTestCases(); // Reload list
+    } else {
+      const errorMsg = result.error || 'Unknown error occurred';
+      // Make error messages more user-friendly
+      let friendlyError = errorMsg;
+      if (errorMsg.includes('401') || errorMsg.includes('Unauthorized')) {
+        friendlyError = 'Authentication failed. Please check your PAT token and try logging in again.';
+      } else if (errorMsg.includes('404')) {
+        friendlyError = 'Project not found. Please verify your organization URL and project name.';
+      } else if (errorMsg.includes('403') || errorMsg.includes('Forbidden')) {
+        friendlyError = 'Access denied. Please ensure your PAT token has the required permissions.';
+      } else if (errorMsg.includes('network') || errorMsg.includes('fetch')) {
+        friendlyError = 'Network error. Please check your connection and try again.';
+      }
+      showToast(`❌ ${friendlyError}`, "error");
+    }
+  } catch (error) {
+    showToast(`❌ Unexpected error: ${error.message}`, "error");
+  } finally {
+    submitBtn.innerHTML = originalText;
+    submitBtn.classList.remove('btn-loading');
+    submitBtn.disabled = false;
   }
-
-  submitBtn.classList.remove('btn-loading');
-  submitBtn.disabled = false;
 });
 
 /**
@@ -707,22 +780,35 @@ window.deleteTestCase = async function(id) {
 // ===================================
 
 /**
- * Show toast notification
+ * Show toast notification with accessibility improvements
  */
 function showToast(message, type = 'success') {
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'polite');
+  toast.setAttribute('aria-atomic', 'true');
+  
+  const icon = type === 'success' ? '✅' : '⚠️';
+  
   toast.innerHTML = `
-    <span class="text-2xl">${type === 'success' ? '✅' : '⚠️'}</span>
+    <span class="text-2xl" aria-hidden="true">${icon}</span>
     <span class="font-semibold text-gray-900">${message}</span>
+    <button onclick="this.parentElement.remove()" class="ml-auto text-gray-500 hover:text-gray-900" aria-label="Dismiss notification" title="Dismiss">✕</button>
   `;
   
   document.body.appendChild(toast);
   
-  setTimeout(() => {
+  // Auto-dismiss after 5 seconds (increased from 3 for better UX)
+  const timeoutId = setTimeout(() => {
     toast.classList.add('hiding');
     setTimeout(() => toast.remove(), 300);
-  }, 3000);
+  }, 5000);
+  
+  // Allow manual dismissal to clear timeout
+  toast.querySelector('button').addEventListener('click', () => {
+    clearTimeout(timeoutId);
+  });
 }
 
 /**
@@ -1066,3 +1152,48 @@ window.downloadResponse = function() {
   URL.revokeObjectURL(url);
   showToast("Response downloaded", "success");
 };
+
+// ===================================
+// INPUT VALIDATION & UX IMPROVEMENTS
+// ===================================
+
+/**
+ * Add real-time validation feedback
+ */
+function setupInputValidation() {
+  const titleInput = document.getElementById('title');
+  const descInput = document.getElementById('description');
+  
+  if (titleInput) {
+    titleInput.addEventListener('input', (e) => {
+      const value = e.target.value.trim();
+      if (value.length > 0 && value.length < 5) {
+        e.target.style.borderColor = '#f59e0b'; // Warning color
+      } else if (value.length >= 5) {
+        e.target.style.borderColor = '#10b981'; // Success color
+      } else {
+        e.target.style.borderColor = '';
+      }
+    });
+  }
+  
+  if (descInput) {
+    descInput.addEventListener('input', (e) => {
+      const value = e.target.value.trim();
+      if (value.length > 0 && value.length < 10) {
+        e.target.style.borderColor = '#f59e0b';
+      } else if (value.length >= 10) {
+        e.target.style.borderColor = '#10b981';
+      } else {
+        e.target.style.borderColor = '';
+      }
+    });
+  }
+}
+
+// Initialize validation when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupInputValidation);
+} else {
+  setupInputValidation();
+}
