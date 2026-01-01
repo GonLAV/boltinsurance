@@ -2,8 +2,10 @@
 <html lang="en" class="h-full">
  <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BOLTEST - TFS Test Case Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="BOLTEST - Test Case Management Tool for Azure DevOps and TFS. Create, manage, and track test cases with ease.">
+  <meta name="theme-color" content="#22c1c3">
+  <title>BOLTEST - Test Case Manager for Azure DevOps & TFS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="/js/azure-api.js"></script>
@@ -46,6 +48,10 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     html, body {
       height: 100%;
       width: 100%;
@@ -53,6 +59,18 @@
       background: var(--color-gray-50);
       color: var(--color-gray-900);
       line-height: 1.6;
+    }
+    
+    /* Focus styles for accessibility */
+    *:focus-visible {
+      outline: 3px solid var(--color-teal-primary);
+      outline-offset: 2px;
+    }
+    
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--color-teal-primary);
+      outline-offset: 2px;
     }
 
     /* Cloud Decorations */
@@ -738,6 +756,33 @@
       .cloud-decoration {
         display: none;
       }
+      
+      /* Mobile-friendly form inputs */
+      .form-input, .form-select, .form-textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
+      
+      /* Adjust stat cards for mobile */
+      .stat-card {
+        padding: 16px;
+      }
+      
+      .stat-value {
+        font-size: 28px;
+      }
+      
+      /* Better mobile modal */
+      .modal-content {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      /* Adjust step grid for mobile */
+      .step-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
     }
 
     /* Loading State */
