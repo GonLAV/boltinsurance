@@ -9,18 +9,94 @@
 const AzureLogger = require('../../utils/azureLogger');
 const config = require('../../config/environment');
 const clientManager = require('../../config/clientManager');
+const authController = require('../../controllers/authControllers');
+const adoController = require('../../controllers/adoController');
 
 // Initialize logger
 const logger = new AzureLogger();
 
-// Import route handlers
-const authRoutes = require('../routes/auth');
-const testCaseRoutes = require('../routes/testCases');
-const adoRoutes = require('../routes/ado');
-const projectsRoutes = require('../routes/projects');
-const workItemsRoutes = require('../routes/workItems');
-const testSuitesRoutes = require('../routes/testSuites');
-const testPlansRoutes = require('../routes/testPlans');
+function createResponse(context) {
+    return {
+        statusCode: 200,
+        headers: {},
+        status(code) {
+            this.statusCode = code;
+            return this;
+        },
+        json(payload) {
+            this.setHeader('Content-Type', 'application/json');
+            return this.send(payload);
+        },
+        send(payload) {
+            if (context.res) return context.res;
+            const responseBody = payload !== undefined ? payload : this.body;
+            this.body = responseBody;
+            context.res = {
+                status: this.statusCode || 200,
+                headers: this.headers,
+                body: responseBody
+            };
+            return context.res;
+        },
+        setHeader(name, value) {
+            this.headers[name] = value;
+            return this;
+        },
+        header(name, value) {
+            return this.setHeader(name, value);
+        }
+    };
+}
+
+function buildRequest(req, body) {
+    const resolvedBody = body !== undefined && body !== null ? body : req.body;
+    return {
+        ...req,
+        body: resolvedBody,
+        headers: req.headers || {},
+        query: req.query || {}
+    };
+}
+
+function respondNotImplemented(context, method, path) {
+    context.res = {
+        status: 501,
+        headers: { 'Content-Type': 'application/json' },
+        body: {
+            error: 'Not Implemented',
+            message: `Route ${method} ${path} is not available in the Azure Function handler.`,
+            timestamp: new Date().toISOString()
+        }
+    };
+}
+
+function ensureContextResponse(context, resMock) {
+    if (context.res) return;
+    context.res = {
+        status: resMock.statusCode || 200,
+        headers: resMock.headers,
+        body: resMock.body !== undefined ? resMock.body : { success: true }
+    };
+}
+
+async function runController(handler, req, res, context, log) {
+    try {
+        await handler(req, res);
+    } catch (err) {
+        const loggerToUse = log || logger;
+        loggerToUse.error('Controller execution failed', err);
+        const message = config.isProduction ? 'Unexpected controller error' : err.message || 'Unexpected controller error';
+        context.res = {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
+            body: {
+                error: 'Internal Server Error',
+                message,
+                timestamp: new Date().toISOString()
+            }
+        };
+    }
+}
 
 /**
  * Main HTTP Trigger Handler
@@ -79,81 +155,68 @@ module.exports = async function (context, req) {
         // Auth routes
         if (path.startsWith('/api/auth')) {
             if (path === '/api/auth/login' && method === 'POST') {
-                // Call login handler
-                const result = await authRoutes.login(body, childLogger);
-                context.res = { status: result.status || 200, body: result };
+                const reqMock = buildRequest(req, body);
+                const resMock = createResponse(context);
+                await runController(authController.login, reqMock, resMock, context, childLogger);
+                ensureContextResponse(context, resMock);
                 return;
             }
             if (path === '/api/auth/logout' && method === 'POST') {
                 context.res = { status: 200, body: { success: true, message: 'Logged out' } };
                 return;
             }
+            if (path === '/api/auth/test-connection' && method === 'POST') {
+                const reqMock = buildRequest(req, body);
+                const resMock = createResponse(context);
+                await runController(authController.testConnection, reqMock, resMock, context, childLogger);
+                ensureContextResponse(context, resMock);
+                return;
+            }
+            respondNotImplemented(context, method, path);
+            return;
         }
 
         // ADO routes
         if (path.startsWith('/api/ado')) {
-            const pat = req.headers['x-pat'] || config.ado.pat;
             if (path === '/api/ado/userstories' && method === 'GET') {
-                const project = req.query?.project || 'Epos';
-                const result = await adoRoutes.getUserStories(project, pat, childLogger);
-                context.res = { status: result.status || 200, body: result };
+                const reqMock = buildRequest(req, body);
+                const resMock = createResponse(context);
+                await runController(adoController.getUserStories, reqMock, resMock, context, childLogger);
+                ensureContextResponse(context, resMock);
                 return;
             }
-            if (path === '/api/ado/projects' && method === 'GET') {
-                const result = await adoRoutes.getProjects(pat, childLogger);
-                context.res = { status: result.status || 200, body: result };
-                return;
-            }
+            respondNotImplemented(context, method, path);
+            return;
         }
 
-        // Test Case routes
+        // Test Case routes (not implemented in Function handler)
         if (path.startsWith('/api/testcases')) {
-            if (path === '/api/testcases' && method === 'GET') {
-                const result = await testCaseRoutes.getTestCases(childLogger);
-                context.res = { status: result.status || 200, body: result };
-                return;
-            }
-            if (path === '/api/testcases' && method === 'POST') {
-                const result = await testCaseRoutes.createTestCase(body, childLogger);
-                context.res = { status: result.status || 201, body: result };
-                return;
-            }
+            respondNotImplemented(context, method, path);
+            return;
         }
 
         // Projects routes
         if (path.startsWith('/api/projects')) {
-            if (path === '/api/projects' && method === 'GET') {
-                const result = await projectsRoutes.getProjects(childLogger);
-                context.res = { status: result.status || 200, body: result };
-                return;
-            }
+            respondNotImplemented(context, method, path);
+            return;
         }
 
         // Work Items routes
         if (path.startsWith('/api/workitems')) {
-            if (path === '/api/workitems' && method === 'GET') {
-                const result = await workItemsRoutes.getWorkItems(childLogger);
-                context.res = { status: result.status || 200, body: result };
-                return;
-            }
+            respondNotImplemented(context, method, path);
+            return;
         }
 
         // Test Suites routes
         if (path.startsWith('/api/testsuites')) {
-            if (path === '/api/testsuites' && method === 'GET') {
-                const result = await testSuitesRoutes.getTestSuites(childLogger);
-                context.res = { status: result.status || 200, body: result };
-                return;
-            }
+            respondNotImplemented(context, method, path);
+            return;
         }
 
         // Test Plans routes
         if (path.startsWith('/api/testplans')) {
-            if (path === '/api/testplans' && method === 'GET') {
-                const result = await testPlansRoutes.getTestPlans(childLogger);
-                context.res = { status: result.status || 200, body: result };
-                return;
-            }
+            respondNotImplemented(context, method, path);
+            return;
         }
 
         // 404 - Route not found
