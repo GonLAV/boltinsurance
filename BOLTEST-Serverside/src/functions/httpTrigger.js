@@ -61,6 +61,7 @@ function buildRequest(req, body) {
 function respondNotImplemented(context, method, path) {
     context.res = {
         status: 501,
+        headers: { 'Content-Type': 'application/json' },
         body: {
             error: 'Not Implemented',
             message: `Route ${method} ${path} is not available in the Azure Function handler.`,
@@ -87,6 +88,7 @@ async function runController(handler, req, res, context, log) {
         const message = config.isProduction ? 'Unexpected controller error' : err.message || 'Unexpected controller error';
         context.res = {
             status: 500,
+            headers: { 'Content-Type': 'application/json' },
             body: {
                 error: 'Internal Server Error',
                 message,
