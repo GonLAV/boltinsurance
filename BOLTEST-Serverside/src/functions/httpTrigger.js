@@ -24,9 +24,11 @@ function createResponse(context) {
             return this;
         },
         json(payload) {
+            this.setHeader('Content-Type', 'application/json');
             return this.send(payload);
         },
         send(payload) {
+            if (context.res) return context.res;
             const responseBody = payload !== undefined ? payload : this.body;
             this.body = responseBody;
             context.res = {
@@ -82,11 +84,12 @@ async function runController(handler, req, res, context, log) {
     } catch (err) {
         const loggerToUse = log || logger;
         loggerToUse.error('Controller execution failed', err);
+        const message = config.isProduction ? 'Unexpected controller error' : err.message || 'Unexpected controller error';
         context.res = {
             status: 500,
             body: {
                 error: 'Internal Server Error',
-                message: err.message || 'Unexpected controller error',
+                message,
                 timestamp: new Date().toISOString()
             }
         };
