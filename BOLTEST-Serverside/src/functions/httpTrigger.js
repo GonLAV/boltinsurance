@@ -25,12 +25,7 @@ function createResponse(context) {
         },
         json(payload) {
             this.body = payload;
-            context.res = {
-                status: this.statusCode || 200,
-                headers: this.headers,
-                body: payload
-            };
-            return context.res;
+            return this.send(payload);
         },
         send(payload) {
             this.body = payload;
@@ -52,9 +47,10 @@ function createResponse(context) {
 }
 
 function buildRequest(req, body) {
+    const resolvedBody = body !== undefined && body !== null ? body : req.body;
     return {
         ...req,
-        body,
+        body: resolvedBody,
         headers: req.headers || {},
         query: req.query || {}
     };
@@ -71,9 +67,31 @@ function respondNotImplemented(context, method, path) {
     };
 }
 
-async function runController(handler, req, res) {
-    await handler(req, res);
-    if (!res || !res.statusCode) return;
+function ensureContextResponse(context, resMock) {
+    if (!context.res) {
+        context.res = {
+            status: resMock.statusCode || 200,
+            headers: resMock.headers,
+            body: resMock.body
+        };
+    }
+}
+
+async function runController(handler, req, res, context, log) {
+    try {
+        await handler(req, res);
+    } catch (err) {
+        const loggerToUse = log || logger;
+        loggerToUse.error('Controller execution failed', err);
+        context.res = {
+            status: 500,
+            body: {
+                error: 'Internal Server Error',
+                message: err.message || 'Unexpected controller error',
+                timestamp: new Date().toISOString()
+            }
+        };
+    }
 }
 
 /**
@@ -135,10 +153,8 @@ module.exports = async function (context, req) {
             if (path === '/api/auth/login' && method === 'POST') {
                 const reqMock = buildRequest(req, body);
                 const resMock = createResponse(context);
-                await runController(authController.login, reqMock, resMock);
-                if (!context.res) {
-                    context.res = { status: resMock.statusCode || 200, headers: resMock.headers, body: resMock.body };
-                }
+                await runController(authController.login, reqMock, resMock, context, childLogger);
+                ensureContextResponse(context, resMock);
                 return;
             }
             if (path === '/api/auth/logout' && method === 'POST') {
@@ -148,10 +164,8 @@ module.exports = async function (context, req) {
             if (path === '/api/auth/test-connection' && method === 'POST') {
                 const reqMock = buildRequest(req, body);
                 const resMock = createResponse(context);
-                await runController(authController.testConnection, reqMock, resMock);
-                if (!context.res) {
-                    context.res = { status: resMock.statusCode || 200, headers: resMock.headers, body: resMock.body };
-                }
+                await runController(authController.testConnection, reqMock, resMock, context, childLogger);
+                ensureContextResponse(context, resMock);
                 return;
             }
             respondNotImplemented(context, method, path);
@@ -163,10 +177,8 @@ module.exports = async function (context, req) {
             if (path === '/api/ado/userstories' && method === 'GET') {
                 const reqMock = buildRequest(req, body);
                 const resMock = createResponse(context);
-                await runController(adoController.getUserStories, reqMock, resMock);
-                if (!context.res) {
-                    context.res = { status: resMock.statusCode || 200, headers: resMock.headers, body: resMock.body };
-                }
+                await runController(adoController.getUserStories, reqMock, resMock, context, childLogger);
+                ensureContextResponse(context, resMock);
                 return;
             }
             respondNotImplemented(context, method, path);
