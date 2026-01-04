@@ -24,11 +24,10 @@ function createResponse(context) {
             return this;
         },
         json(payload) {
-            this.body = payload;
-            return this.send();
+            return this.send(payload);
         },
         send(payload) {
-            const responseBody = this.body !== undefined ? this.body : payload;
+            const responseBody = payload !== undefined ? payload : this.body;
             this.body = responseBody;
             context.res = {
                 status: this.statusCode || 200,
@@ -73,7 +72,7 @@ function ensureContextResponse(context, resMock) {
     context.res = {
         status: resMock.statusCode || 200,
         headers: resMock.headers,
-        body: resMock.body
+        body: resMock.body !== undefined ? resMock.body : { success: true }
     };
 }
 
