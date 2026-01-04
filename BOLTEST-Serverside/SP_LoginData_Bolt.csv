@@ -1,0 +1,11 @@
+Username,Password,ExpectedResult,Role,Environment
+admin@bolt.test,Admin#123,success,Admin,Staging
+agent@bolt.test,Agent#123,success,Agent,Staging
+customer@bolt.test,Cust#123,success,Customer,Staging
+locked@bolt.test,Lock#123,locked,Customer,Staging
+wrongpass@bolt.test,Wrong#123,error,Customer,Staging
+noauth@bolt.test,NoAuth#123,unauthorized,Guest,Staging
+nulluser@bolt.test,,error,Customer,Staging
+admin@bolt.test,InvalidFormat,error,Admin,Staging
+customer@bolt.test,Cust#123,success,Customer,QA
+admin@bolt.test,Admin#123,success,Admin,QA

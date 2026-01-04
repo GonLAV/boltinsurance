@@ -1,0 +1,249 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Azure DevOps Shared Parameter Set Schema",
+  "description": "Schema for SP_LoginData_Bolt - Data-driven login test parameters",
+  "type": "object",
+  "definitions": {
+    "sharedParameterSet": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier of the Shared Parameter Set"
+        },
+        "name": {
+          "type": "string",
+          "enum": ["SP_LoginData_Bolt"],
+          "description": "Name of the Shared Parameter Set"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the Shared Parameter Set"
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date and time when the Shared Parameter Set was created"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/column"
+          },
+          "description": "List of columns in the Shared Parameter Set"
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/parameterRow"
+          },
+          "description": "List of test data rows"
+        },
+        "linkedTestCases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "testCaseId": {
+                "type": "integer"
+              },
+              "testCaseTitle": {
+                "type": "string"
+              }
+            }
+          },
+          "description": "Test cases that reference this Shared Parameter Set"
+        }
+      },
+      "required": ["name", "columns", "rows"]
+    },
+    "column": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": ["Username", "Password", "ExpectedResult", "Role", "Environment"],
+          "description": "Column name (must match exactly in test steps: @ColumnName)"
+        },
+        "dataType": {
+          "type": "string",
+          "enum": ["String", "Integer", "DateTime", "Boolean"],
+          "description": "Data type of the column"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of what this column contains"
+        }
+      },
+      "required": ["name", "dataType"]
+    },
+    "parameterRow": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Row sequence number (1-based)"
+        },
+        "Username": {
+          "type": "string",
+          "description": "User account for login test",
+          "examples": ["admin@bolt.test", "customer@bolt.test"]
+        },
+        "Password": {
+          "type": "string",
+          "description": "Password for the user account (synthetic/test-only)",
+          "examples": ["Admin#123", "Cust#123", ""]
+        },
+        "ExpectedResult": {
+          "type": "string",
+          "enum": ["success", "error", "locked", "unauthorized"],
+          "description": "Expected outcome for this test case"
+        },
+        "Role": {
+          "type": "string",
+          "enum": ["Admin", "Agent", "Customer", "Guest"],
+          "description": "User role/permission level"
+        },
+        "Environment": {
+          "type": "string",
+          "enum": ["Staging", "QA", "Pre-Prod"],
+          "description": "Test environment (Staging, QA, etc.)"
+        }
+      },
+      "required": ["Username", "Password", "ExpectedResult", "Role", "Environment"]
+    }
+  },
+  "properties": {
+    "sharedParameterSets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/sharedParameterSet"
+      }
+    }
+  },
+  "examples": [
+    {
+      "sharedParameterSets": [
+        {
+          "name": "SP_LoginData_Bolt",
+          "description": "Data-driven login test parameters for BOLT authentication",
+          "columns": [
+            {
+              "name": "Username",
+              "dataType": "String",
+              "description": "Email or username for login"
+            },
+            {
+              "name": "Password",
+              "dataType": "String",
+              "description": "Password (synthetic/test-only)"
+            },
+            {
+              "name": "ExpectedResult",
+              "dataType": "String",
+              "description": "Expected outcome: success, error, locked, unauthorized"
+            },
+            {
+              "name": "Role",
+              "dataType": "String",
+              "description": "User role: Admin, Agent, Customer, Guest"
+            },
+            {
+              "name": "Environment",
+              "dataType": "String",
+              "description": "Test environment: Staging, QA"
+            }
+          ],
+          "rows": [
+            {
+              "id": 1,
+              "Username": "admin@bolt.test",
+              "Password": "Admin#123",
+              "ExpectedResult": "success",
+              "Role": "Admin",
+              "Environment": "Staging"
+            },
+            {
+              "id": 2,
+              "Username": "agent@bolt.test",
+              "Password": "Agent#123",
+              "ExpectedResult": "success",
+              "Role": "Agent",
+              "Environment": "Staging"
+            },
+            {
+              "id": 3,
+              "Username": "customer@bolt.test",
+              "Password": "Cust#123",
+              "ExpectedResult": "success",
+              "Role": "Customer",
+              "Environment": "Staging"
+            },
+            {
+              "id": 4,
+              "Username": "locked@bolt.test",
+              "Password": "Lock#123",
+              "ExpectedResult": "locked",
+              "Role": "Customer",
+              "Environment": "Staging"
+            },
+            {
+              "id": 5,
+              "Username": "wrongpass@bolt.test",
+              "Password": "Wrong#123",
+              "ExpectedResult": "error",
+              "Role": "Customer",
+              "Environment": "Staging"
+            },
+            {
+              "id": 6,
+              "Username": "noauth@bolt.test",
+              "Password": "NoAuth#123",
+              "ExpectedResult": "unauthorized",
+              "Role": "Guest",
+              "Environment": "Staging"
+            },
+            {
+              "id": 7,
+              "Username": "nulluser@bolt.test",
+              "Password": "",
+              "ExpectedResult": "error",
+              "Role": "Customer",
+              "Environment": "Staging"
+            },
+            {
+              "id": 8,
+              "Username": "admin@bolt.test",
+              "Password": "InvalidFormat",
+              "ExpectedResult": "error",
+              "Role": "Admin",
+              "Environment": "Staging"
+            },
+            {
+              "id": 9,
+              "Username": "customer@bolt.test",
+              "Password": "Cust#123",
+              "ExpectedResult": "success",
+              "Role": "Customer",
+              "Environment": "QA"
+            },
+            {
+              "id": 10,
+              "Username": "admin@bolt.test",
+              "Password": "Admin#123",
+              "ExpectedResult": "success",
+              "Role": "Admin",
+              "Environment": "QA"
+            }
+          ],
+          "linkedTestCases": [
+            {
+              "testCaseId": 12345,
+              "testCaseTitle": "TC_Login_DataDriven_Bolt"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

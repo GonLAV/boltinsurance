@@ -1,0 +1,36 @@
+{
+  "bindings": [
+    {
+      "name": "documents",
+      "type": "cosmosDBTrigger",
+      "direction": "in",
+      "connectionStringSetting": "CosmosDbConnection",
+      "databaseName": "boltest",
+      "collectionName": "testData",
+      "leaseConnectionStringSetting": "CosmosDbConnection",
+      "leaseDatabaseName": "boltest",
+      "leaseCollectionName": "leases",
+      "leaseCollectionPrefix": "change-feed",
+      "maxItemsPerInvocation": 100,
+      "startFromBeginning": false,
+      "preferredLocations": ""
+    },
+    {
+      "name": "auditLog",
+      "type": "cosmosDB",
+      "direction": "out",
+      "connectionStringSetting": "CosmosDbConnection",
+      "databaseName": "boltest",
+      "collectionName": "auditLog",
+      "createIfNotExists": true
+    },
+    {
+      "name": "testNotificationQueue",
+      "type": "serviceBus",
+      "direction": "out",
+      "connection": "ServiceBusConnection",
+      "queueName": "test-notifications",
+      "cardinality": "many"
+    }
+  ]
+}

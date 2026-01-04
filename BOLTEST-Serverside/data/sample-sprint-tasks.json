@@ -1,0 +1,152 @@
+{
+  "sprint": "2601",
+  "metrics": [
+    {
+      "team": "Epos\\RnD\\Keren's Team",
+      "totalCompletedHours": 330,
+      "totalEstimatedHours": 492,
+      "totalRemainingHours": 102,
+      "completedTaskCount": 56,
+      "totalTaskCount": 73
+    },
+    {
+      "team": "Epos\\RnD\\Architecture\\DevOps CICD",
+      "totalCompletedHours": 14,
+      "totalEstimatedHours": 24,
+      "totalRemainingHours": 16,
+      "completedTaskCount": 1,
+      "totalTaskCount": 9
+    },
+    {
+      "team": "Epos\\Professional Services",
+      "totalCompletedHours": 106,
+      "totalEstimatedHours": 25,
+      "totalRemainingHours": 0,
+      "completedTaskCount": 87,
+      "totalTaskCount": 90
+    },
+    {
+      "team": "Epos\\Paktolus",
+      "totalCompletedHours": 47,
+      "totalEstimatedHours": 120,
+      "totalRemainingHours": 0,
+      "completedTaskCount": 0,
+      "totalTaskCount": 7
+    },
+    {
+      "team": "Epos\\RnD\\Abigail's Team",
+      "totalCompletedHours": 494,
+      "totalEstimatedHours": 556,
+      "totalRemainingHours": 17,
+      "completedTaskCount": 37,
+      "totalTaskCount": 41
+    },
+    {
+      "team": "Epos\\RnD\\Standardization Team",
+      "totalCompletedHours": 69,
+      "totalEstimatedHours": 0,
+      "totalRemainingHours": 0,
+      "completedTaskCount": 4,
+      "totalTaskCount": 4
+    },
+    {
+      "team": "Epos\\RnD\\Sapir's Team",
+      "totalCompletedHours": 324,
+      "totalEstimatedHours": 180,
+      "totalRemainingHours": 0,
+      "completedTaskCount": 24,
+      "totalTaskCount": 24
+    },
+    {
+      "team": "Epos\\RnD\\Rina's Team",
+      "totalCompletedHours": 259,
+      "totalEstimatedHours": 380,
+      "totalRemainingHours": 129,
+      "completedTaskCount": 19,
+      "totalTaskCount": 26
+    },
+    {
+      "team": "Epos\\RnD\\Automation Team",
+      "totalCompletedHours": 112,
+      "totalEstimatedHours": 147,
+      "totalRemainingHours": 57,
+      "completedTaskCount": 12,
+      "totalTaskCount": 29
+    },
+    {
+      "team": "Epos\\RnD\\Markets Success",
+      "totalCompletedHours": 6,
+      "totalEstimatedHours": 0,
+      "totalRemainingHours": 0,
+      "completedTaskCount": 13,
+      "totalTaskCount": 13
+    },
+    {
+      "team": "Epos\\RnD\\Alexandra's Team",
+      "totalCompletedHours": 358,
+      "totalEstimatedHours": 392,
+      "totalRemainingHours": 95,
+      "completedTaskCount": 22,
+      "totalTaskCount": 33
+    },
+    {
+      "team": "Epos\\RnD\\Pavlo's Team",
+      "totalCompletedHours": 140,
+      "totalEstimatedHours": 192,
+      "totalRemainingHours": 25,
+      "completedTaskCount": 18,
+      "totalTaskCount": 20
+    },
+    {
+      "team": "Epos\\RnD\\Vighnesh's Team",
+      "totalCompletedHours": 311,
+      "totalEstimatedHours": 383,
+      "totalRemainingHours": 52,
+      "completedTaskCount": 17,
+      "totalTaskCount": 24
+    },
+    {
+      "team": "Epos\\RnD",
+      "totalCompletedHours": 35,
+      "totalEstimatedHours": 21,
+      "totalRemainingHours": 0,
+      "completedTaskCount": 1,
+      "totalTaskCount": 4
+    },
+    {
+      "team": "Epos",
+      "totalCompletedHours": 71,
+      "totalEstimatedHours": 0,
+      "totalRemainingHours": 0,
+      "completedTaskCount": 1,
+      "totalTaskCount": 2
+    },
+    {
+      "team": "Epos\\RnD\\Dmytro's Team",
+      "totalCompletedHours": 129,
+      "totalEstimatedHours": 273,
+      "totalRemainingHours": 83,
+      "completedTaskCount": 10,
+      "totalTaskCount": 17
+    },
+    {
+      "team": "Epos\\Product Team\\Markets Product",
+      "totalCompletedHours": 0,
+      "totalEstimatedHours": 0,
+      "totalRemainingHours": 0,
+      "completedTaskCount": 0,
+      "totalTaskCount": 2
+    }
+  ],
+  "summary": {
+    "totalEstimatedHours": 3185,
+    "totalCompletedHours": 2805,
+    "totalRemainingHours": 576
+  },
+  "_metadata": {
+    "responseTime": "276ms",
+    "timestamp": "2026-01-04T12:45:38.852Z",
+    "endpoint": "/sprint-tasks",
+    "optimized": false
+  }
+}

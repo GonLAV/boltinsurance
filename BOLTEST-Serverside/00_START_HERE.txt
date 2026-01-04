@@ -1,0 +1,226 @@
+✅ BOLT DATA-DRIVEN TEST SETUP — COMPLETE PACKAGE DELIVERED
+═══════════════════════════════════════════════════════════════
+
+Generated: January 4, 2026
+Project: Epos (Azure DevOps Server / TFS On-Prem)
+Scenario: Login with Shared Parameters
+Test Artifacts: SP_LoginData_Bolt + TC_Login_DataDriven_Bolt
+
+═══════════════════════════════════════════════════════════════
+
+📦 ARTIFACTS GENERATED (8 FILES)
+
+1. ✅ INDEX.md
+   - Master index and quick navigation guide
+   - File inventory, reading order, troubleshooting index
+   
+2. ✅ README_DATA_DRIVEN_TEST_SETUP.md
+   - Complete overview and workflows
+   - Phase-by-phase setup instructions
+   - Success metrics and next steps
+   - START HERE for full understanding
+
+3. ✅ SHARED_PARAMETERS_LINKING_GUIDE.md ⭐ MAIN GUIDE
+   - Step-by-step UI setup (4 phases)
+   - Detailed troubleshooting section
+   - Column name reference (critical!)
+   - Shared Parameters creation to Test Case attachment
+
+4. ✅ EXECUTION_CHECKLIST.md ⭐ USE DURING RUN
+   - Pre-run validation (30 items to check)
+   - Iteration-by-iteration execution steps (all 10 scenarios)
+   - Post-run results review
+   - Troubleshooting flowchart
+
+5. ✅ QUICK_REF_CARD.md
+   - Single-page quick reference (PRINT THIS)
+   - 3 critical reminders
+   - Common quick fixes
+   - Test execution summary table
+
+6. ✅ TC_Login_DataDriven_Bolt_Steps.md
+   - Test Case template with metadata
+   - 10 parameterized steps (ready to copy)
+   - Acceptance criteria
+   - Step descriptions for manual entry
+
+7. ✅ SP_LoginData_Bolt.csv
+   - 10 test data rows × 5 columns
+   - All scenarios: success, error, locked, unauthorized
+   - Ready to import or use as reference
+   - Includes Staging and QA environments
+
+8. ✅ Create-SharedParametersAndTestCase.ps1
+   - PowerShell automation script (advanced)
+   - Creates Test Case via Azure DevOps REST API
+   - Creates 10 test steps automatically
+   - For Azure DevOps Server (on-prem)
+
+9. ✅ SharedParameterSchema.json
+   - JSON schema for Shared Parameter Set
+   - Validation reference
+   - API integration reference
+
+═══════════════════════════════════════════════════════════════
+
+🎯 QUICK START (Choose Your Path)
+
+PATH A: Manual UI Setup (Recommended)
+────────────────────────────────────
+Time: 2–3 hours (first time)
+Steps:
+  1. Read: README_DATA_DRIVEN_TEST_SETUP.md (5 min)
+  2. Follow: SHARED_PARAMETERS_LINKING_GUIDE.md (30–40 min)
+  3. Validate: EXECUTION_CHECKLIST.md pre-run (5 min)
+  4. Execute: Run test from Test Plans (30–60 min)
+  5. Review: EXECUTION_CHECKLIST.md post-run (10 min)
+
+Best for: First-time setup, learning the process
+
+
+PATH B: Automation (Advanced)
+───────────────────────────
+Time: 1–2 hours
+Steps:
+  1. Review: README_DATA_DRIVEN_TEST_SETUP.md (5 min)
+  2. Run: Create-SharedParametersAndTestCase.ps1 (5 min)
+  3. Manual: Complete Phase 1 if needed (10 min)
+  4. Execute: Run test with EXECUTION_CHECKLIST.md (30–60 min)
+
+Best for: Experienced users, reusable automation
+
+
+PATH C: Quick Reference
+──────────────────────
+Time: 30 minutes
+Steps:
+  1. Reference: QUICK_REF_CARD.md
+  2. Data: SP_LoginData_Bolt.csv
+  3. Execute: EXECUTION_CHECKLIST.md
+
+Best for: Already familiar with Shared Parameters
+
+═══════════════════════════════════════════════════════════════
+
+📋 WHAT YOU'LL CREATE
+
+Shared Parameter Set: SP_LoginData_Bolt
+  ├─ Columns: Username, Password, ExpectedResult, Role, Environment
+  └─ Rows: 10 test cases
+      ├─ 3 success scenarios (Admin, Agent, Customer; Staging & QA)
+      ├─ 3 error scenarios (wrong password, invalid format, missing)
+      ├─ 1 locked account scenario
+      ├─ 1 unauthorized/permission scenario
+      └─ 2 environment variants (Staging, QA)
+
+Test Case: TC_Login_DataDriven_Bolt
+  ├─ Steps: 10 parameterized steps
+  │   ├─ Navigate to login page (@Environment)
+  │   ├─ Enter username (@Username)
+  │   ├─ Enter password (@Password)
+  │   ├─ Click Login
+  │   ├─ Validate success (@ExpectedResult, @Role)
+  │   ├─ Validate error (@ExpectedResult)
+  │   ├─ Validate locked (@ExpectedResult)
+  │   ├─ Validate unauthorized (@ExpectedResult, @Role)
+  │   ├─ Verify browser logs
+  │   └─ Clean up
+  │
+  ├─ Metadata:
+  │   ├─ Title: TC_Login_DataDriven_Bolt
+  │   ├─ Area Path: Epos\QA
+  │   ├─ Iteration: Epos\Current Sprint
+  │   ├─ Tags: Login, DataDriven, Authentication, Bolt
+  │   └─ Priority: 2
+  │
+  └─ Linked: SP_LoginData_Bolt (10 iterations)
+
+═══════════════════════════════════════════════════════════════
+
+⚠️ CRITICAL REMINDERS (Prevent Issues!)
+
+1. COLUMN NAME SPELLING MUST BE EXACT
+   ✓ Correct:   @Username, @Password, @ExpectedResult, @Role, @Environment
+   ✗ Wrong:     @username, @User, @expected_result, @role_name, @env
+
+2. 10 ROWS = 10 ITERATIONS
+   Shared Parameter Set with 10 rows → Test run with 10 iterations
+   If you see "1 of 1" instead of "1 of 10" → Reattach Shared Parameters
+
+3. REATTACH AFTER CHANGES
+   Changed column names? → Remove and re-add Shared Parameters
+
+4. VERIFY BEFORE RUNNING
+   Check: "Iteration 1 of 10" in test runner
+   If wrong: See troubleshooting in EXECUTION_CHECKLIST.md
+
+═══════════════════════════════════════════════════════════════
+
+✅ SUCCESS METRICS
+
+After setup and execution, you should have:
+
+□ Shared Parameter Set: SP_LoginData_Bolt (1)
+□ Test Case: TC_Login_DataDriven_Bolt (1)
+□ Test Data Rows: 10 (5 columns)
+□ Test Steps: 10 (parameterized)
+□ Iterations: 10 (one per row)
+□ Test Results: 10 (all Pass)
+□ Pass Rate: 100%
+□ Screenshots: 10 (one per iteration)
+□ Troubleshooting: 0 (no issues!)
+
+═══════════════════════════════════════════════════════════════
+
+📂 FILE ORGANIZATION
+
+BOLTEST-Serverside/
+├── INDEX.md ← START HERE (navigation)
+├── README_DATA_DRIVEN_TEST_SETUP.md ← Full overview
+├── SHARED_PARAMETERS_LINKING_GUIDE.md ← Detailed setup
+├── EXECUTION_CHECKLIST.md ← During & after run
+├── QUICK_REF_CARD.md ← Print this!
+├── TC_Login_DataDriven_Bolt_Steps.md ← Test steps template
+├── SP_LoginData_Bolt.csv ← Test data (10 rows)
+├── Create-SharedParametersAndTestCase.ps1 ← Automation
+├── SharedParameterSchema.json ← Schema reference
+└── AUTO_ASSIGN_TESTCASE_IMPLEMENTATION.md ← Previous work (reference)
+
+═══════════════════════════════════════════════════════════════
+
+🚀 NEXT IMMEDIATE STEPS
+
+1. Open: INDEX.md (quick navigation)
+2. Read: README_DATA_DRIVEN_TEST_SETUP.md (5 min overview)
+3. Choose: PATH A (manual), PATH B (automation), or PATH C (quick ref)
+4. Follow: Setup steps from chosen path
+5. Execute: Use EXECUTION_CHECKLIST.md during test run
+6. Success: All 10 iterations passing ✓
+
+═══════════════════════════════════════════════════════════════
+
+📞 QUICK HELP
+
+Problem: "1 of 1" instead of "1 of 10"
+→ See: SHARED_PARAMETERS_LINKING_GUIDE.md → Troubleshooting
+
+Problem: "@Username" shows literally
+→ See: QUICK_REF_CARD.md → Troubleshooting Quick Fixes
+
+Problem: Need setup steps
+→ See: SHARED_PARAMETERS_LINKING_GUIDE.md → Phase 1-4
+
+Problem: During test execution guidance
+→ See: EXECUTION_CHECKLIST.md → During Test Execution
+
+═══════════════════════════════════════════════════════════════
+
+✨ YOU'RE ALL SET!
+
+Everything is documented, templated, and ready to use.
+
+👉 Next: Open INDEX.md and follow Quick Start Path A or B
+
+Good luck! 🎯
+
+═══════════════════════════════════════════════════════════════

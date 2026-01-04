@@ -1,0 +1,21 @@
+﻿# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# JWT Secret (שנה את זה לסיסמה חזקה!)
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production_12345
+
+# Azure DevOps API Version
+AZURE_API_VERSION=5.0
+
+# Attachment Sync API Version
+# For TFS Server 2019: use 5.0 or 5.1
+# For newer Azure DevOps: use 6.0, 6.1, 7.0, 7.1, etc.
+# Default: 5.1 (compatible with TFS Server)
+AZDO_API_VERSION=5.1
+
+# CORS
+ALLOWED_ORIGINS=http://localhost:3000
+
+# For local dev: bypass Azure DevOps authentication checks (should be 'false' for real sync)
+SKIP_AZURE_CHECK=false

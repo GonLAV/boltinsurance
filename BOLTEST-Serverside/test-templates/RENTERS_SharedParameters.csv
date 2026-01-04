@@ -1,0 +1,2 @@
+FirstName	LastName	Email	DateOfBirth	PrimaryPhoneNumber	PropertyAddressLine1	PropertyCity	PropertyState	PropertyZipCode	EffectiveDate	MaritalStatus	OccupancyType	PLHaveAnyLosses
+TestA	BoltAPI test	tesfdf90@epos.com	1980-09-11	555-656-4564	1127 Montego Dr	Colorado Springs	CO	80925	{{currentdate}}	Single	TenantPrimary	false

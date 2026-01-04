@@ -1,0 +1,2 @@
+FirstName	LastName	Email	DateOfBirth	PrimaryPhoneNumber	PropertyAddressLine1	PropertyCity	PropertyState	PropertyZipCode	EffectiveDate	MaritalStatus	OccupancyType	PLTypeOfDwelling
+GetAPItest	TestCopy	tessdsd0@epos.com	1980-09-11	555-656-4564	1127 Montego Dr	Springfield	OH	45503	{{currentdate}}	Single	OwnerPrimary	SingleFamilyHouse

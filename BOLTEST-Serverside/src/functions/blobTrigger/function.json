@@ -1,0 +1,20 @@
+{
+  "bindings": [
+    {
+      "name": "myBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "uploads/{name}",
+      "connection": "BlobStorageConnection"
+    },
+    {
+      "name": "testAttachmentDocument",
+      "type": "cosmosDB",
+      "direction": "out",
+      "connectionStringSetting": "CosmosDbConnection",
+      "databaseName": "boltest",
+      "collectionName": "attachments",
+      "createIfNotExists": true
+    }
+  ]
+}

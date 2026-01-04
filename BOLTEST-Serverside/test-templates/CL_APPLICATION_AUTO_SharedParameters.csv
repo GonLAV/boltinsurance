@@ -1,0 +1,2 @@
+FirstName	LastName	Email	DateOfBirth	PrimaryPhoneNumber	PropertyAddressLine1	PropertyCity	PropertyState	PropertyZipCode	MailingAddressLine1	MailingCity	MailingState	MailingZipCode	EffectiveDate	FederalIDNumber	LegalEntity	StartYear	OrganizationName
+ATtest	BoltAPiiiTest	sdf6654f@epos.com	2000-01-01	457-457-4574	259 Ilyssa Way	Staten Island	NY	10312	4906 Cotton Row NW	Huntsville	AL	35816	{{currentdate}}	715540267	SoleProprietorsOrIndividuals	2019	TestAAYT

@@ -1,0 +1,19 @@
+{
+  "bindings": [
+    {
+      "name": "myTimer",
+      "type": "timerTrigger",
+      "direction": "in",
+      "schedule": "0 */6 * * * *"
+    },
+    {
+      "name": "syncLog",
+      "type": "cosmosDB",
+      "direction": "out",
+      "connectionStringSetting": "CosmosDbConnection",
+      "databaseName": "boltest",
+      "collectionName": "syncLogs",
+      "createIfNotExists": true
+    }
+  ]
+}
